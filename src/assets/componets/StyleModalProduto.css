@@ -1,0 +1,161 @@
+.addPromodalform{
+width: 100%;
+}
+.ModalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+.ModalProduto {
+  width: 100%;
+  max-width: 650px;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 12px;
+  padding: 28px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  animation: aparecerModal 0.2s ease;
+}
+
+.ModalProdutoHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.ModalProdutoHeader h2 {
+  margin: 0 0 8px;
+  font-size: 24px;
+  color: #0f172a;
+}
+
+.ModalProdutoHeader p {
+  margin: 0;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.ModalFechar {
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-size: 30px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.FormProdutoGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.CampoProduto {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.CampoProduto label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.CampoProduto input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 7px;
+  outline: none;
+  font-size: 14px;
+  color: #0f172a;
+  background: #fff;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.CampoProduto input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.ModalProdutoFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.BtnCancelar,
+.BtnGuardar {
+  padding: 12px 18px;
+  border-radius: 7px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.BtnCancelar {
+  background: #fff;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+}
+
+.BtnCancelar:hover {
+  background: #f1f5f9;
+}
+
+.BtnGuardar {
+  background: #2459d3;
+  border: 1px solid #2459d3;
+  color: #fff;
+}
+
+.BtnGuardar:hover {
+  background: #1d4ed8;
+}
+
+@keyframes aparecerModal {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 560px) {
+  .ModalProduto {
+    padding: 20px;
+  }
+
+  .FormProdutoGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .ModalProdutoFooter {
+    flex-direction: column-reverse;
+  }
+
+  .BtnCancelar,
+  .BtnGuardar {
+    width: 100%;
+  }
+}

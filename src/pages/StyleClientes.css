@@ -1,0 +1,541 @@
+
+/* =====================================
+   PÁGINA CLIENTES - LOJIX
+===================================== */
+
+.contentClientes {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ContentClientesPage {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  gap: 12px;
+}
+
+/* RESUMO */
+
+.ResumoClientes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.CardResumoCliente {
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.CardResumoCliente p {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.CardResumoCliente strong {
+  font-size: 19px;
+  font-weight: 700;
+  color: #0f172a;
+  overflow-wrap: anywhere;
+}
+
+/* TABELA PRINCIPAL */
+
+.TabelaClientesPage {
+  min-height: 0;
+  max-height: 100%;
+  overflow: auto;
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 0 20px;
+}
+
+.TabelaClientes {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.TabelaClientes thead {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #f8fafc;
+}
+
+.TabelaClientes th {
+  padding: 19px 10px;
+  text-align: left;
+  font-size: 13px;
+  border-bottom: 1px solid #45444456;
+  white-space: nowrap;
+}
+
+.TabelaClientes td {
+  padding: 16px 10px;
+  font-size: 13px;
+  border-bottom: 1px solid #45444435;
+  white-space: nowrap;
+}
+
+.TabelaClientes td strong {
+  color: #0f172a;
+}
+
+/* DÍVIDAS */
+
+.DividaPendente {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.DividaLiquidada {
+  color: #16a34a;
+  font-weight: 600;
+}
+
+/* AÇÕES */
+
+.AcoesCliente {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.AcoesCliente button {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+}
+
+.ClienteBtnHistorico {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.ClienteBtnEditar {
+  background: #bfc8da;
+  color: #2563eb;
+}
+
+.ClienteBtnEliminar {
+  background: #e0c1c1;
+  color: #dc2626;
+}
+
+.AcoesCliente button:hover {
+  filter: brightness(0.94);
+  transform: translateY(-1px);
+}
+
+/* =====================================
+   MODAIS
+===================================== */
+
+.modalClienteOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(15, 23, 42, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modalCliente {
+  width: 100%;
+  max-width: 620px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 12px;
+  padding: 26px;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+  animation: aparecerCliente 0.2s ease;
+}
+
+.modalClienteHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.modalClienteHeader h2 {
+  font-size: 21px;
+  color: #0f172a;
+  margin-bottom: 7px;
+}
+
+.modalClienteHeader p {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.ClienteFecharModal {
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-size: 21px;
+  cursor: pointer;
+}
+
+/* FORMULÁRIO */
+
+.formCliente {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 18px;
+}
+
+.FormClienteGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.CampoCliente {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.CampoCliente label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.CampoCliente input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 7px;
+  background: #fff;
+  color: #0f172a;
+  outline: none;
+  font-size: 14px;
+}
+
+.CampoCliente input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+/* BOTÕES DOS MODAIS */
+
+.modalClienteFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.modalClienteFooter button {
+  padding: 11px 17px;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ClienteCancelar {
+  background: #fff;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+}
+
+.ClienteGuardar {
+  background: #2563eb;
+  border: 1px solid #2563eb;
+  color: #fff;
+}
+
+.ClienteGuardar:hover {
+  background: #1d4ed8;
+}
+
+/* =====================================
+   HISTÓRICO DE COMPRAS
+===================================== */
+
+.modalClienteHistorico {
+  max-width: 1050px;
+}
+
+.ResumoHistoricoCliente {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.ResumoHistoricoCliente > div {
+  background: #f1f5f9;
+  padding: 15px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ResumoHistoricoCliente span {
+  color: #64748b;
+  font-size: 12px;
+}
+
+.ResumoHistoricoCliente strong {
+  font-size: 17px;
+  color: #0f172a;
+}
+
+.ValorDividaHistorico {
+  color: #dc2626 !important;
+}
+
+.TabelaHistoricoCliente {
+  width: 100%;
+  overflow-x: auto;
+  max-height: 350px;
+  background: #f8fafc;
+  border-radius: 8px;
+}
+
+.TabelaHistoricoCliente table {
+  width: 100%;
+  min-width: 750px;
+  border-collapse: collapse;
+}
+
+.TabelaHistoricoCliente th {
+  position: sticky;
+  top: 0;
+  background: #f8fafc;
+  z-index: 2;
+  text-align: left;
+  padding: 14px 10px;
+  font-size: 11px;
+  border-bottom: 1px solid #cbd5e1;
+}
+
+.TabelaHistoricoCliente td {
+  padding: 13px 10px;
+  font-size: 12px;
+  border-bottom: 1px solid #e2e8f0;
+  white-space: nowrap;
+}
+
+/* ESTADOS DAS VENDAS */
+
+.EstadoVenda {
+  padding: 5px 8px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.EstadoVenda.pago {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.EstadoVenda.parcial {
+  background: #fef3c7;
+  color: #a16207;
+}
+
+.EstadoVenda.pendente {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* BOTÃO RECEBER */
+
+.BtnReceberCliente {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  background: #2563eb;
+  color: #fff;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.BtnReceberCliente:hover {
+  background: #1d4ed8;
+}
+
+/* =====================================
+   PAGAMENTO
+===================================== */
+
+.modalPagamentoOverlay {
+  z-index: 1100;
+}
+
+.modalPagamento {
+  max-width: 450px;
+}
+
+.ResumoPagamentoCliente {
+  background: #f1f5f9;
+  padding: 15px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ResumoPagamentoCliente div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.ResumoPagamentoCliente span {
+  color: #64748b;
+  font-size: 12px;
+}
+
+.ResumoPagamentoCliente strong {
+  color: #0f172a;
+  font-size: 15px;
+}
+
+.AvisoPagamentoCliente {
+  padding: 12px;
+  border-radius: 7px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* ANIMAÇÃO */
+
+@keyframes aparecerCliente {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =====================================
+   RESPONSIVIDADE
+===================================== */
+
+@media (max-width: 1024px) {
+  .ContentClientesPage {
+    grid-template-rows: auto auto minmax(300px, 1fr);
+  }
+
+  .TabelaClientesPage {
+    overflow: auto;
+  }
+
+  .TabelaClientes {
+    min-width: 700px;
+  }
+}
+
+@media (max-width: 640px) {
+  .contentClientes {
+    height: auto;
+    min-height: 100%;
+  }
+
+  .ContentClientesPage {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .ResumoClientes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .CardResumoCliente {
+    padding: 13px;
+  }
+
+  .CardResumoCliente strong {
+    font-size: 16px;
+  }
+
+  .TabelaClientesPage {
+    width: 100%;
+    max-height: 65vh;
+    min-height: 200px;
+    padding: 0 10px;
+    overflow: auto;
+  }
+
+  .TabelaClientes {
+    min-width: 700px;
+  }
+
+  .TabelaClientes th,
+  .TabelaClientes td {
+    padding: 13px 9px;
+    font-size: 12px;
+  }
+
+  .modalClienteOverlay {
+    padding: 12px;
+  }
+
+  .modalCliente {
+    padding: 19px;
+    max-height: 90dvh;
+  }
+
+  .FormClienteGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .ResumoHistoricoCliente {
+    grid-template-columns: 1fr;
+  }
+
+  .modalClienteFooter {
+    flex-direction: column-reverse;
+  }
+
+  .modalClienteFooter button {
+    width: 100%;
+  }
+}

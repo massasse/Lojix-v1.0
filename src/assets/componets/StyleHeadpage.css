@@ -1,0 +1,41 @@
+.HaedProdutoPage{
+    width: 100%;
+    height: 40px;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+   
+}
+
+.ContainerInputserch{
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    padding: 0px 12px;
+    border-radius: 8px;
+    width: 100%;
+    background-color: #fff;
+    overflow: hidden;
+}
+
+.ContainerInputserch>input{
+    border: none;
+    width: 100%;
+    height: 100%;
+    padding: 12px;
+    outline: none;
+}
+
+.btn{
+     border: none;
+     border-radius: 8px;
+     width: 200px;
+     padding: 12px;
+     font-weight: 600;
+     color: #f8fafc;
+     background-color: #2563eb;
+     cursor: pointer;
+}
+.btn:hover{
+    background-color: #2059d4;
+}

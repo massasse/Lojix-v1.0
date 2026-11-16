@@ -1,0 +1,25 @@
+.containerCard{
+    background-color: #f8fafc;
+    display: flex;
+    flex-flow: column wrap;
+    border-radius: 10px;
+    padding: 30px 15px;
+    gap: 10px;
+    transition: transform 0.4s ease
+}
+
+.containerCard:hover{
+transform: scale(1.03);
+}
+
+.valor{
+  font-size: 20px !important;
+  font-weight: 600 !important
+}
+.containerCard .titulo{
+font-size: 12px;
+font-weight: 600;
+color: #3c3c3c;
+};
+
+

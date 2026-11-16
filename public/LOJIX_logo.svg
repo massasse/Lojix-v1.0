@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2170 725" role="img" aria-label="LOJIX logo">
+  <defs>
+    <linearGradient id="xBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1769ff"/>
+      <stop offset="100%" stop-color="#0757df"/>
+    </linearGradient>
+    <linearGradient id="xCyan" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#19bff2"/>
+      <stop offset="100%" stop-color="#21b9e9"/>
+    </linearGradient>
+  </defs>
+
+  <!-- LOJI — #f8fafc -->
+  <g fill="#f8fafc">
+    <!-- L -->
+    <path d="M132 121
+             Q132 109 144 109 H241 Q253 109 253 121
+             V397
+             Q253 424 280 424
+             H452 Q464 424 464 436 V523
+             Q464 535 452 535 H279
+             Q132 535 132 388 Z"/>
+
+    <!-- O -->
+    <path fill-rule="evenodd" d="M710 110
+             C575 110 481 191 481 323
+             C481 454 575 540 710 540
+             C845 540 939 454 939 323
+             C939 191 845 110 710 110 Z
+             M710 211
+             C779 211 817 253 817 323
+             C817 394 779 437 710 437
+             C641 437 603 394 603 323
+             C603 253 641 211 710 211 Z"/>
+
+    <!-- J -->
+    <path d="M1160 109 H1258 Q1270 109 1270 121 V388
+             Q1270 424 1303 424
+             H1390 Q1403 424 1397 437
+             L1354 523 Q1348 535 1334 535 H1164
+             Q1151 535 1157 522 L1204 437
+             Q1209 424 1194 424 H1160
+             Q1148 424 1148 412 V121 Q1148 109 1160 109 Z"/>
+
+    <!-- I -->
+    <rect x="1321" y="109" width="118" height="426" rx="10"/>
+  </g>
+
+  <!-- X -->
+  <g>
+    <!-- descending blue stroke -->
+    <path fill="url(#xBlue)" d="M1515 109
+             H1621 Q1630 109 1637 116
+             L1909 397 Q1921 409 1921 425
+             V510 Q1921 535 1896 535
+             H1817 Q1807 535 1800 528
+             L1527 247 Q1515 235 1515 219 Z"/>
+
+    <!-- ascending cyan stroke -->
+    <path fill="url(#xCyan)" d="M1817 109
+             H1902 Q1921 109 1921 128
+             V212 Q1921 226 1911 236
+             L1638 527 Q1630 535 1617 535
+             H1529 Q1515 535 1515 521
+             V450 Q1515 438 1524 428
+             L1800 116 Q1807 109 1817 109 Z"/>
+
+    <!-- central overlap -->
+    <path fill="#0757df" opacity="0.92" d="M1669 266 L1730 203 L1784 258 L1722 322 Z"/>
+  </g>
+</svg>

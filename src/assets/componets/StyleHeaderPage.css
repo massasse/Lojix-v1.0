@@ -1,0 +1,42 @@
+header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0px;
+    margin-bottom: 20px;
+}
+
+header>h1{
+    font-size: 24px;
+}
+
+
+.containerUser{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 10px;
+}
+.containerusericon{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 35px;
+    height: 35px;
+    background-color: #7e7c7c;
+    border-radius: 50%;
+}
+.usericon{
+    width: 30px;
+}
+
+.containerUser>div>.userLogado{
+    font-size: 12px;
+    font-weight: 600;
+    color:#000000;
+}
+
+.containerUser>div>.emailLogado{
+    font-size: 10px;
+    color:#3c3c3c;
+}
