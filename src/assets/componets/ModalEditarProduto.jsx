@@ -20,10 +20,11 @@ function ModalEditarProduto({ produto, fecharModal, atualizarProduto }) {
     }));
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
+    try {
 
-    atualizarProduto({
+    await atualizarProduto({
       ...produto,
       ...form,
       compra: Number(form.compra),
@@ -32,6 +33,7 @@ function ModalEditarProduto({ produto, fecharModal, atualizarProduto }) {
     });
 
     fecharModal();
+    } catch (erro) { alert("Não foi possível guardar: " + erro.message); }
   }
 
   return (

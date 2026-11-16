@@ -1,95 +1,46 @@
-import { FaRegUser, FaLock } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import users from "../Data/Users.json";
-import "./StyleLogin.css";
+import { FaRegUser, FaLock } from 'react-icons/fa';
+import { useNavigate, Navigate } from 'react-router-dom';
+import { useState } from 'react';
+import { supabase } from '../../lib/supabase';
+import { useAuth } from '../../lib/AuthContext';
+import './StyleLogin.css';
 
 function Login() {
-  const [inputemail, setInputEmail] = useState("");
-  const [inputpass, setInputPass] = useState("");
+  const [inputemail, setInputEmail] = useState('');
+  const [inputpass, setInputPass] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
-  const [error, setError] = useState("");
+  const { user, ready } = useAuth();
 
-function entrar(e) {
-  e.preventDefault();
+  if (ready && user) return <Navigate to="/principal/dashbord" replace />;
 
-  const email = inputemail.trim();
-  const pass = inputpass;
-
-  const userEncontrado = users.find(
-    (user) =>
-      user.email === email &&
-      user.password === pass
-  );
-
-  if (userEncontrado) {
+  async function entrar(e) {
+    e.preventDefault();
+    setBusy(true);
+    setError('');
     try {
-      const usuarioSeguro = { ...userEncontrado };
-
-// Remover a palavra-passe
-delete usuarioSeguro.password;
-
-// Guardar apenas os dados necessários
-localStorage.setItem(
-  "userLogado",
-  JSON.stringify(usuarioSeguro)
-);;
-
-      setError("");
-
-      navigate("/principal/dashbord");
-
-    } catch (erro) {
-      setError(
-        "Não foi possível guardar a sessão. Tente novamente."
-      );
-
-      console.error("Erro ao guardar sessão:", erro);
+      const { error: authError } = await supabase.auth.signInWithPassword({
+        email: inputemail.trim(),
+        password: inputpass,
+      });
+      if (authError) throw authError;
+      navigate('/principal/dashbord');
+    } catch (err) {
+      setError(err.message || 'Não foi possível iniciar sessão.');
+    } finally {
+      setBusy(false);
     }
-
-  } else {
-    setError("Email ou senha incorretos.");
-
-    setTimeout(() => {
-      setError("");
-    }, 3000);
   }
-}
-  
-  return (
-    <>
-      <div id="containerapp">
-        <img src="/lojix_logo.png" alt="logo" className="logo" />
-        <form onSubmit={entrar}>
-          <div className="ContainerInput">
-            <FaRegUser />
-            <input
-              type="email"
-              placeholder="Digite seu email..."
-              required
-              className="input email"
-              onChange={(envent) => setInputEmail(envent.target.value)}
-              autoComplete="off "
-            />
-          </div>
-          <div className="ContainerInput">
-            <FaLock />
-            <input
-              type="text"
-              placeholder="Digite sua senha..."
-              required
-              className="input  pass"
-              onChange={(envent) => setInputPass(envent.target.value)}
-            />
-          </div>
-          <p className="error">{error}</p>
-          <button type="submit" className="bntlogin">
-            Entrar
-          </button>
-        </form>
-      </div>
-    </>
-  );
-}
 
+  return <div id="containerapp">
+    <img src="/lojix_logo.png" alt="LOJIX" className="logo" />
+    <form onSubmit={entrar}>
+      <div className="ContainerInput"><FaRegUser /><input type="email" placeholder="Digite o seu email..." required className="input email" value={inputemail} onChange={e => setInputEmail(e.target.value)} autoComplete="email" /></div>
+      <div className="ContainerInput"><FaLock /><input type="password" placeholder="Digite a sua palavra-passe..." required className="input pass" value={inputpass} onChange={e => setInputPass(e.target.value)} autoComplete="current-password" /></div>
+      <p className="error" role="alert">{error}</p>
+      <button className="bntlogin" disabled={busy} type="submit">{busy ? 'A iniciar sessão...' : 'Iniciar sessão'}</button>
+    </form>
+  </div>;
+}
 export default Login;

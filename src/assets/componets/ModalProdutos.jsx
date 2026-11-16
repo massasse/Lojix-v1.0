@@ -20,10 +20,11 @@ function ModalProduto({ fecharModal, adicionarProduto }) {
     });
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
+    try {
 
-    adicionarProduto({
+    await adicionarProduto({
       ...form,
       compra: Number(form.compra),
       venda: Number(form.venda),
@@ -31,6 +32,7 @@ function ModalProduto({ fecharModal, adicionarProduto }) {
     });
 
     fecharModal();
+    } catch (erro) { alert("Não foi possível guardar: " + erro.message); }
   }
 
   return (

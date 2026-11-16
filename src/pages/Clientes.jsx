@@ -1,5 +1,6 @@
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
+import { listarClientes,criarCliente,editarCliente as atualizarClienteRemoto,apagarCliente,listarVendas,pagarFiado } from "../lib/lojixApi";
 import HeaderPage from "../assets/componets/HeaderPage";
 import HeadPage from "../assets/componets/Headpage";
 
@@ -12,29 +13,6 @@ import {
 } from "react-icons/fa";
 
 import "./StyleClientes.css";
-
-// Ler dados do LocalStorage
-function carregarLista(chave) {
-  try {
-    const dados = JSON.parse(localStorage.getItem(chave) || "[]");
-
-    if (Array.isArray(dados)) return dados;
-
-    if (Array.isArray(dados?.clientes)) {
-      return dados.clientes;
-    }
-
-    if (dados && typeof dados === "object") {
-      return Object.values(dados).filter(
-        (item) => item && typeof item === "object"
-      );
-    }
-
-    return [];
-  } catch {
-    return [];
-  }
-}
 
 // Normalizar texto para pesquisa
 function normalizarTexto(texto) {
@@ -105,23 +83,17 @@ function obterVendasCliente(vendas, cliente) {
 }
 
 function Clientes() {
-const [clientes, setClientes] = useState(() =>
-  carregarLista("lojix_clientes").map((cliente) => ({
-    ...cliente,
-    nome:
-      cliente.nome ??
-      cliente.nomeCliente ??
-      cliente.nome_completo ??
-      cliente.name ??
-      cliente.cliente ??
-      "",
-    telefone: cliente.telefone ?? cliente.phone ?? "",
-  }))
-);
-
-  const [vendas, setVendas] = useState(() =>
-    carregarLista("lojix_vendas")
-  );
+const [clientes,setClientes]=useState([]);
+  const [vendas,setVendas]=useState([]);
+  const [,setProcessando]=useState(false);
+  const processoPendente=useRef(false);
+  useEffect(()=>{
+    let active=true;
+    Promise.all([listarClientes(),listarVendas()]).then(([c,v])=>{
+      if(active){setClientes(c);setVendas(v)}
+    }).catch(e=>alert('Erro ao carregar clientes: '+e.message));
+    return ()=>{active=false};
+  },[]);
 
   const [pesquisa, setPesquisa] = useState("");
 
@@ -137,42 +109,6 @@ const [clientes, setClientes] = useState(() =>
   const [vendaPagamento, setVendaPagamento] = useState(null);
 
   const [valorPagamento, setValorPagamento] = useState("");
-
-  // Guardar clientes preservando o formato antigo,
-  // caso esteja organizado dentro de { clientes: [] }.
-  function guardarClientes(novaLista) {
-    let dadosParaGuardar = novaLista;
-
-    try {
-      const dadosAntigos = JSON.parse(
-        localStorage.getItem("lojix_clientes") || "[]"
-      );
-
-      if (
-        !Array.isArray(dadosAntigos) &&
-        dadosAntigos &&
-        Array.isArray(dadosAntigos.clientes)
-      ) {
-        dadosParaGuardar = {
-          ...dadosAntigos,
-          clientes: novaLista,
-        };
-      }
-    }  catch (erro) {
-  console.error("Erro ao ler clientes existentes:", erro);
-
-  throw new Error(
-    "Não foi possível validar os dados existentes. Nenhuma alteração foi feita."
-  );
-}
-
-    localStorage.setItem(
-      "lojix_clientes",
-      JSON.stringify(dadosParaGuardar)
-    );
-
-    setClientes(novaLista);
-  }
 
   // Vendas filtradas para cada cliente
   const clientesFiltrados = useMemo(() => {
@@ -232,96 +168,27 @@ const [clientes, setClientes] = useState(() =>
     setModal("editar");
   }
 
-  // Guardar cliente
-  function guardarCliente(e) {
-    e.preventDefault();
-
-    const nome = form.nome.trim();
-    const telefone = form.telefone.trim();
-
-    if (!nome || !telefone) {
-      alert("Preencha o nome e o telefone do cliente.");
-      return;
-    }
-
-    try {
-      let novaLista;
-
-      if (modal === "editar") {
-        novaLista = clientes.map((cliente) =>
-          String(cliente.id) === String(clienteAtivo.id)
-            ? {
-                ...cliente,
-                nome,
-                telefone,
-              }
-            : cliente
-        );
-      } else {
-        const maiorId = clientes.reduce(
-          (maior, cliente) =>
-            Math.max(maior, Number(cliente.id) || 0),
-          0
-        );
-
-        const novoCliente = {
-          id: maiorId + 1,
-          nome,
-          telefone,
-          dataCadastro: new Date().toISOString(),
-        };
-
-        novaLista = [...clientes, novoCliente];
-      }
-
-      guardarClientes(novaLista);
-
-      setModal("");
-      setClienteAtivo(null);
-
-    } catch (erro) {
-      console.error("Erro ao guardar cliente:", erro);
-
-      alert(
-        "Não foi possível guardar o cliente. Verifique o LocalStorage."
-      );
-    }
+  // Guardar os dados directamente no Supabase.
+  async function guardarCliente(e){
+    e.preventDefault();if(processoPendente.current)return;
+    const nome=form.nome.trim(),telefone=form.telefone.trim();
+    if(!nome||!telefone){alert('Preencha o nome e o telefone do cliente.');return;}
+    processoPendente.current=true;setProcessando(true);
+    try{
+      if(modal==='editar')await atualizarClienteRemoto({...clienteAtivo,nome,telefone});
+      else await criarCliente({nome,telefone});
+      setClientes(await listarClientes());
+      setModal('');setClienteAtivo(null);
+    }catch(erro){alert('Não foi possível guardar o cliente: '+erro.message)}
+    finally{processoPendente.current=false;setProcessando(false)}
   }
-
-  // Eliminar cliente
-  function eliminarCliente(cliente) {
-    const compras = obterVendasCliente(vendas, cliente);
-
-    const possuiDivida = compras.some(
-      (venda) => calcularDivida(venda) > 0
-    );
-
-    if (compras.length > 0 || possuiDivida) {
-      alert(
-        "Não é possível eliminar este cliente porque existem vendas ou dívidas associadas. O histórico deve ser preservado."
-      );
-
-      return;
+  async function eliminarCliente(cliente){
+    if(obterVendasCliente(vendas,cliente).length>0){
+      alert('Não é possível eliminar este cliente porque tem vendas associadas.');return;
     }
-
-    const confirmar = window.confirm(
-      `Deseja realmente eliminar o cliente ${cliente.nome}?`
-    );
-
-    if (!confirmar) return;
-
-    try {
-      const novaLista = clientes.filter(
-        (item) => String(item.id) !== String(cliente.id)
-      );
-
-      guardarClientes(novaLista);
-
-    } catch (erro) {
-      console.error("Erro ao eliminar cliente:", erro);
-
-      alert("Não foi possível eliminar o cliente.");
-    }
+    if(!window.confirm(`Eliminar o cliente ${cliente.nome}?`))return;
+    try{await apagarCliente(cliente);setClientes(await listarClientes())}
+    catch(e){alert('Não foi possível eliminar o cliente: '+e.message)}
   }
 
   // Abrir histórico
@@ -343,181 +210,18 @@ const [clientes, setClientes] = useState(() =>
     setValorPagamento("");
   }
 
-  // Registar pagamento parcial ou total
-  function confirmarPagamento(e) {
-    e.preventDefault();
-
-    const valor = Number(valorPagamento);
-
-    if (!Number.isFinite(valor) || valor <= 0) {
-      alert("Introduza um valor de pagamento válido.");
-      return;
-    }
-
-    const vendasAtuais = carregarLista("lojix_vendas");
-
-    const vendaAtual = vendasAtuais.find(
-      (venda) =>
-        String(venda.id) === String(vendaPagamento.id)
-    );
-
-    if (!vendaAtual) {
-      alert("Não foi possível localizar esta venda.");
-      return;
-    }
-
-    const dividaAtual = calcularDivida(vendaAtual);
-
-    if (dividaAtual <= 0) {
-      alert("Esta dívida já foi totalmente liquidada.");
-      return;
-    }
-
-    if (valor > dividaAtual) {
-      alert(
-        `O pagamento não pode ultrapassar ${formatarMT(dividaAtual)}.`
-      );
-
-      return;
-    }
-
-    const agora = new Date();
-
-    const pagamentoId =
-      `PG-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
-
-    const pagamento = {
-      id: pagamentoId,
-      valor,
-      data: agora.toISOString(),
-    };
-
-    const novoValorPago =
-      Number(vendaAtual.valorPago || 0) + valor;
-
-    const novaDivida = Math.max(0, dividaAtual - valor);
-
-    const vendaAtualizada = {
-      ...vendaAtual,
-
-      valorPago: novoValorPago,
-
-      valorEmDivida: novaDivida,
-
-      estado: novaDivida <= 0.001 ? "Pago" : "Parcial",
-
-      pagamentos: [
-        ...(Array.isArray(vendaAtual.pagamentos)
-          ? vendaAtual.pagamentos
-          : []),
-        pagamento,
-      ],
-    };
-
-    const novasVendas = vendasAtuais.map((venda) =>
-      String(venda.id) === String(vendaAtual.id)
-        ? vendaAtualizada
-        : venda
-    );
-
-    // Registar o recebimento no Caixa
-    const movimentosAtuais = carregarLista(
-      "lojix_caixa_movimentos"
-    );
-
-    const novoMovimento = {
-      id: `CX-${Date.now()}-${Math.random()
-        .toString(36)
-        .slice(2, 7)}`,
-
-      tipo: "recebimento_fiado",
-
-      descricao: `Pagamento de fiado ${vendaAtual.id}`,
-
-      valor,
-
-      data: agora.toISOString(),
-
-      vendaId: vendaAtual.id,
-
-      clienteId:
-        vendaAtual.clienteId ?? clienteAtivo?.id ?? null,
-
-      cliente:
-        vendaAtual.cliente || clienteAtivo?.nome || "",
-
-      origem: "fiado",
-
-      pagamentoId,
-    };
-
-    const novosMovimentos = [
-      ...movimentosAtuais,
-      novoMovimento,
-    ];
-
-    // Guardar os dados com possibilidade de recuperação
-    const vendasAnteriores = localStorage.getItem("lojix_vendas");
-
-    const movimentosAnteriores = localStorage.getItem(
-      "lojix_caixa_movimentos"
-    );
-
-    try {
-      localStorage.setItem(
-        "lojix_vendas",
-        JSON.stringify(novasVendas)
-      );
-
-      localStorage.setItem(
-        "lojix_caixa_movimentos",
-        JSON.stringify(novosMovimentos)
-      );
-
-      setVendas(novasVendas);
-
-      setVendaPagamento(null);
-      setValorPagamento("");
-
-      alert(
-        novaDivida <= 0.001
-          ? "Dívida totalmente liquidada!"
-          : `Pagamento registado! Dívida restante: ${formatarMT(novaDivida)}`
-      );
-
-    } catch (erro) {
-      console.error("Erro ao registar pagamento:", erro);
-
-      // Tentar restaurar os dados anteriores
-      try {
-        if (vendasAnteriores === null) {
-          localStorage.removeItem("lojix_vendas");
-        } else {
-          localStorage.setItem(
-            "lojix_vendas",
-            vendasAnteriores
-          );
-        }
-
-        if (movimentosAnteriores === null) {
-          localStorage.removeItem("lojix_caixa_movimentos");
-        } else {
-          localStorage.setItem(
-            "lojix_caixa_movimentos",
-            movimentosAnteriores
-          );
-        }
-      } catch (erroRestauro) {
-        console.error(
-          "Erro ao restaurar os dados:",
-          erroRestauro
-        );
-      }
-
-      alert(
-        "Ocorreu um erro ao guardar o pagamento. Os dados anteriores foram preservados sempre que possível."
-      );
-    }
+  // Registo atómico: pagamento, dívida e caixa são actualizados numa só transacção.
+  async function confirmarPagamento(e){
+    e.preventDefault();if(processoPendente.current)return;
+    const valor=Number(valorPagamento);
+    if(!Number.isFinite(valor)||valor<=0){alert('Introduza um valor válido.');return;}
+    processoPendente.current=true;setProcessando(true);
+    try{
+      const resultado=await pagarFiado(vendaPagamento.id,valor);
+      setVendas(await listarVendas());setVendaPagamento(null);setValorPagamento('');
+      alert(resultado.valorEmDivida===0?'Dívida totalmente liquidada!':`Pagamento registado! Dívida restante: ${formatarMT(resultado.valorEmDivida)}`);
+    }catch(erro){alert('Não foi possível registar pagamento: '+erro.message)}
+    finally{processoPendente.current=false;setProcessando(false)}
   }
 
   // Histórico do cliente seleccionado

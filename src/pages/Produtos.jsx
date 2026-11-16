@@ -6,18 +6,12 @@ import ModalEditarProduto from "../assets/componets/ModalEditarProduto";
 import { FaPen, FaTrash } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import "./StyleProdutos.css";
+import {listarProdutos,criarProduto,editarProduto,apagarProduto} from "../lib/lojixApi";
 
 function Produtos() {
 
-  // LocalStorage
-  const [produtos, setProdutos] = useState(() => {
-    const guardados = localStorage.getItem("lojix_produtos");
-    return JSON.parse(guardados || "[]");
-  });
-
-  useEffect(() => {
-    localStorage.setItem("lojix_produtos", JSON.stringify(produtos));
-  }, [produtos]);
+  const [produtos,setProdutos]=useState([]);
+  useEffect(()=>{let active=true;listarProdutos().then(data=>{if(active)setProdutos(data)}).catch(e=>alert("Erro ao carregar produtos: "+e.message));return()=>{active=false}},[]);
 
   const [produtoEditar, setProdutoEditar] = useState(null);
   const [inputserch, setInputserch] = useState("");
@@ -48,37 +42,18 @@ function Produtos() {
     );
   });
 
-  // Adicionar produto
-  function adicionarProduto(novoProduto) {
-    const novoId =
-      produtos.length > 0
-        ? Math.max(...produtos.map((p) => p.id)) + 1
-        : 1;
-
-    setProdutos((produtosAtuais) => [
-      ...produtosAtuais,
-      {
-        id: novoId,
-        ...novoProduto,
-      },
-    ]);
+  async function adicionarProduto(novoProduto){
+    const criado=await criarProduto(novoProduto);
+    setProdutos(lista=>[...lista,criado]);
   }
-
-  // Editar produto
-  function atualizarProduto(produtoAtualizado) {
-    setProdutos((produtosAtuais) =>
-      produtosAtuais.map((p) =>
-        p.id === produtoAtualizado.id
-          ? produtoAtualizado
-          : p
-      )
-    );
+  async function atualizarProduto(produtoAtualizado){
+    const editado=await editarProduto(produtoAtualizado);
+    setProdutos(lista=>lista.map(p=>String(p.id)===String(editado.id)?editado:p));
   }
-
-  // Remover produto
-  function remover(id) {
-    const novaLista = produtos.filter((p) => p.id !== id);
-    setProdutos(novaLista);
+  async function remover(id){
+    if(!window.confirm("Eliminar este produto?"))return;
+    try{await apagarProduto(id);setProdutos(lista=>lista.filter(p=>String(p.id)!==String(id)))}
+    catch(e){alert("Não foi possível eliminar: "+e.message)}
   }
 
   return (

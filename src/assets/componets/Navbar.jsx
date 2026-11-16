@@ -1,6 +1,7 @@
 
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { supabase } from "../../lib/supabase";
 
 import {
   FaShoppingCart,
@@ -17,6 +18,7 @@ import "./StyleNavbar.css";
 
 function NavBar() {
   const [menuAberto, setMenuAberto] = useState(false);
+  const navigate=useNavigate();
 
   const fecharMenu = () => setMenuAberto(false);
 
@@ -42,7 +44,7 @@ function NavBar() {
       label: "Clientes",
     },
     {
-      to: "/principal/Caixa",
+      to: "/principal/caixa",
       icon: <FaCashRegister />,
       label: "Caixa",
     },
@@ -109,6 +111,7 @@ function NavBar() {
           ))}
         </nav>
 
+        <button type="button" onClick={async()=>{await supabase.auth.signOut(); navigate("/");}} style={{border:0,background:"transparent",color:"#fff",padding:12,cursor:"pointer"}}>Terminar sessão</button>
         <div className="sidebarFooter">
           <span>LOJIX · Gestão de Vendas</span>
         </div>

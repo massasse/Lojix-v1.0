@@ -1,5 +1,6 @@
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
+import { listarMovimentos,listarVendas,guardarMovimento } from "../lib/lojixApi";
 import HeaderPage from "../assets/componets/HeaderPage";
 
 import {
@@ -15,42 +16,6 @@ import {
 } from "react-icons/fa";
 
 import "./StyleCaixa.css";
-
-const CHAVE_MOVIMENTOS = "lojix_caixa_movimentos";
-
-// =====================================
-// FUNÇÕES AUXILIARES
-// =====================================
-
-function lerArray(chave) {
-  const guardado = localStorage.getItem(chave);
-
-  if (guardado === null) return [];
-
-  const dados = JSON.parse(guardado);
-
-  if (!Array.isArray(dados)) {
-    throw new Error(`A chave ${chave} não contém uma lista válida.`);
-  }
-
-  return dados;
-}
-
-function carregarDados() {
-  try {
-    return {
-      movimentos: lerArray(CHAVE_MOVIMENTOS),
-      vendas: lerArray("lojix_vendas"),
-      erro: "",
-    };
-  } catch (erro) {
-    return {
-      movimentos: [],
-      vendas: [],
-      erro: erro.message,
-    };
-  }
-}
 
 function gerarId(prefixo) {
   return `${prefixo}-${Date.now()}-${Math.random()
@@ -151,15 +116,17 @@ function nomeTipo(tipo) {
 
 function Caixa() {
 
-  const [dadosIniciais] = useState(() => carregarDados());
-
-  const [movimentos, setMovimentos] = useState(
-    dadosIniciais.movimentos
-  );
-
-  const [vendas] = useState(dadosIniciais.vendas);
-
-  const [erro, setErro] = useState(dadosIniciais.erro);
+  const [movimentos,setMovimentos]=useState([]);
+  const [vendas,setVendas]=useState([]);
+  const [erro,setErro]=useState('');
+  useEffect(()=>{
+    let ativo=true;
+    const carregar=()=>Promise.all([listarMovimentos(),listarVendas()]).then(([m,v])=>{
+      if(ativo){setMovimentos(m);setVendas(v);setErro('')}
+    }).catch(e=>{if(ativo)setErro('Erro ao carregar Caixa: '+e.message)});
+    carregar();window.addEventListener('focus',carregar);
+    return ()=>{ativo=false;window.removeEventListener('focus',carregar)};
+  },[]);
 
   const [modal, setModal] = useState("");
 
@@ -180,27 +147,13 @@ function Caixa() {
   // GUARDAR MOVIMENTOS
   // =====================================
 
-  function guardarMovimentos(novaLista) {
-    try {
-      localStorage.setItem(
-        CHAVE_MOVIMENTOS,
-        JSON.stringify(novaLista)
-      );
-
-      setMovimentos(novaLista);
-      setErro("");
-
-      return true;
-
-    } catch (erro) {
-      console.error("Erro ao guardar movimentos:", erro);
-
-      alert(
-        "Não foi possível guardar o movimento. Verifique o espaço disponível no navegador."
-      );
-
-      return false;
-    }
+  async function guardarMovimentos(novaLista){
+    try{
+      const anteriores=new Map(movimentos.map(m=>[String(m.id),m]));
+      const alterados=novaLista.filter(m=>JSON.stringify(anteriores.get(String(m.id)))!==JSON.stringify(m));
+      for(const m of alterados)await guardarMovimento(m);
+      setMovimentos(await listarMovimentos());setErro('');return true;
+    }catch(e){console.error(e);alert('Erro ao guardar no Supabase: '+e.message);return false}
   }
 
   // =====================================
@@ -456,7 +409,7 @@ function Caixa() {
   // LEVANTAMENTOS E EMPRÉSTIMOS
   // =====================================
 
-  function guardarMovimento(e) {
+  async function guardarMovimentoHandler(e) {
     e.preventDefault();
 
     const valor = Number(form.valor);
@@ -525,7 +478,7 @@ function Caixa() {
           )
         : [...movimentos, novoSaldo];
 
-      if (guardarMovimentos(novaLista)) {
+      if (await guardarMovimentos(novaLista)) {
         fecharModal();
         alert("Saldo inicial guardado com sucesso.");
       }
@@ -545,7 +498,7 @@ function Caixa() {
         data: agora,
       };
 
-      if (guardarMovimentos([...movimentos, movimento])) {
+      if (await guardarMovimentos([...movimentos, movimento])) {
         fecharModal();
         alert("Contagem de caixa registada.");
       }
@@ -567,7 +520,7 @@ function Caixa() {
     };
 
     if (
-      guardarMovimentos([
+      await guardarMovimentos([
         ...movimentos,
         novoMovimento,
       ])
@@ -602,7 +555,7 @@ function Caixa() {
   // CONFIRMAR DEVOLUÇÃO
   // =====================================
 
-  function confirmarDevolucao(e) {
+  async function confirmarDevolucao(e) {
     e.preventDefault();
 
     const valor = Number(form.valor);
@@ -651,7 +604,7 @@ function Caixa() {
     };
 
     if (
-      guardarMovimentos([
+      await guardarMovimentos([
         ...movimentos,
         movimento,
       ])
@@ -1179,7 +1132,7 @@ function Caixa() {
 
             <form
               className="FormCaixa"
-              onSubmit={guardarMovimento}
+              onSubmit={guardarMovimentoHandler}
             >
 
               <div className="CampoCaixa">

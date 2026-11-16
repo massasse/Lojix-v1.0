@@ -1,34 +1,14 @@
 import { useState, useEffect } from "react";
-import CardDashbord from "../assets/componets/carddashbord";
+import CardDashbord from "../assets/componets/CardDashbord";
 import HeaderPage from "../assets/componets/HeaderPage";
 import "./StyleDashbord.css";
+import {listarProdutos,listarVendas,listarMovimentos} from "../lib/lojixApi";
 
 
 
 
-function lerListaLocalStorage(chave) {
-  const guardado = localStorage.getItem(chave);
-
-  if (guardado === null) return [];
-
-  try {
-    const dados = JSON.parse(guardado);
-
-    if (!Array.isArray(dados)) {
-      throw new Error(`A chave ${chave} não contém uma lista.`);
-    }
-
-    return dados;
-  } catch (erro) {
-    console.error(`Erro ao ler ${chave}:`, erro);
-    return [];
-  }
-}
-
-function carregarDadosDashboard() {
-  const produtos = lerListaLocalStorage("lojix_produtos");
-  const vendas = lerListaLocalStorage("lojix_vendas");
-  const movimentos = lerListaLocalStorage("lojix_caixa_movimentos");
+async function carregarDadosDashboard(){
+  const [produtos,vendas,movimentos]=await Promise.all([listarProdutos(),listarVendas(),listarMovimentos()]);
 
   // Somar movimentos de determinado tipo
   const somarMovimentos = (tipo) => {
@@ -132,14 +112,15 @@ function formatarMT(valor) {
 }
 
 function Dashbord() {
-   const [dados, setDados] = useState(() => carregarDadosDashboard());
+   const [dados,setDados]=useState({produtos:[],vendas:[],saldo:0,valorStockTotal:0,areceber:0,totalVendas:0});
 
   // Actualizar os dados quando regressar ao Dashboard
   useEffect(() => {
     const actualizar = () => {
-      setDados(carregarDadosDashboard());
+      carregarDadosDashboard().then(setDados).catch(e=>console.error("Erro no Dashboard:",e));
     };
 
+    actualizar();
     window.addEventListener("focus", actualizar);
     window.addEventListener("storage", actualizar);
 

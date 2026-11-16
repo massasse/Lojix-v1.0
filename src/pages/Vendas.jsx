@@ -2,56 +2,30 @@ import HeaderPage from "../assets/componets/HeaderPage";
 import { FaSearch } from "react-icons/fa";
 import { FaCube } from "react-icons/fa6";
 import "./StyleVendas.css";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useEffect } from "react";
 import { FaTrash } from "react-icons/fa";
+import { listarProdutos, listarClientes, registarVenda } from "../lib/lojixApi";
 
 function Vendas() {
-  let produtos = localStorage.getItem("lojix_produtos") || "[]";
-
-  let produtosFiltrados = JSON.parse(produtos).filter((p) => {
-    return p.stock > 0;
-  });
-
-  let vendedor = JSON.parse(localStorage.getItem("userLogado"))
- 
-
-  const [listaCarrinho, setListaCarrinho] = useState(() => {
-    return JSON.parse(localStorage.getItem("lojix_carrinho") || "[]");
-  });
-
-  const [listaVendas, setListaVendas] = useState(() => {
-    return JSON.parse(localStorage.getItem("lojix_vendas") || "[]");
-  });
-
-  const [listaClientes] = useState(() => {
-    try {
-      const clientesGuardados = JSON.parse(
-        localStorage.getItem("lojix_clientes") || "[]",
-      );
-
-      if (Array.isArray(clientesGuardados)) {
-        return clientesGuardados;
-      }
-
-      if (Array.isArray(clientesGuardados?.clientes)) {
-        return clientesGuardados.clientes;
-      }
-
-      return clientesGuardados && typeof clientesGuardados === "object"
-        ? Object.values(clientesGuardados)
-        : [];
-    } catch {
-      return [];
-    }
-  });
+  const [produtos,setProdutos]=useState([]);
+  const produtosFiltrados=produtos.filter(p=>Number(p.stock)>0);
+  const [listaCarrinho,setListaCarrinho]=useState([]);
+  const [listaClientes,setListaClientes]=useState([]);
+  const [processando,setProcessando]=useState(false);
+  const processoPendente=useRef(false);
+  useEffect(()=>{
+    let active=true;
+    Promise.all([listarProdutos(),listarClientes()]).then(([p,c])=>{
+      if(active){setProdutos(p);setListaClientes(c)}
+    }).catch(e=>alert("Erro ao carregar vendas: "+e.message));
+    return()=>{active=false};
+  },[]);
   const [modalAberto, setModalAberto] = useState(false);
   const [tipoOperacao, setTipoOperacao] = useState("");
   const [clienteSelecionado, setClienteSelecionado] = useState("");
   const [desconto, setDesconto] = useState("0");
-  useEffect(() => {
-    localStorage.setItem("lojix_carrinho", JSON.stringify(listaCarrinho));
-  }, [listaCarrinho]);
+
   const total = listaCarrinho.reduce((soma, p) => {
     return soma + Number(p.vendaTotal || 0);
   }, 0);
@@ -60,9 +34,7 @@ function Vendas() {
   const descontoNumerico = Math.max(0, Number(desconto) || 0);
   const descontoAplicado = Math.min(descontoNumerico, total);
   const totalFinal = Math.max(0, total - descontoAplicado);
-  useEffect(() => {
-    localStorage.setItem("lojix_vendas", JSON.stringify(listaVendas));
-  }, [listaVendas]);
+
 
   function obterNomeCliente(cliente) {
     if (typeof cliente === "string") {
@@ -152,7 +124,6 @@ function Vendas() {
 
   function deleteCarrinho(key) {
     const novoCarrinho = (carrinho) => {
-      let produtoExistente = carrinho.find((p) => p.id === key);
       return carrinho.filter((p) => p.id != key);
     };
     setListaCarrinho(novoCarrinho);
@@ -180,131 +151,21 @@ function Vendas() {
     setModalAberto(false);
   }
 
-  function confirmarOperacao(e) {
+  async function confirmarOperacao(e){
     e.preventDefault();
-
-    const clienteEncontrado = listaClientes.find(
-      (cliente, index) => obterIdCliente(cliente, index) === clienteSelecionado,
-    );
-
-    const nomeClienteOperacao =
-      tipoOperacao === "venda" && clienteSelecionado === "__CAIXA__"
-        ? "Caixa"
-        : obterNomeCliente(clienteEncontrado);
-
-    if (
-      !clienteSelecionado ||
-      !nomeClienteOperacao.trim() ||
-      (tipoOperacao === "fiado" && clienteSelecionado === "__CAIXA__")
-    ) {
-      alert(
-        tipoOperacao === "fiado"
-          ? "Seleccione um cliente para registar o fiado."
-          : "Seleccione um cliente para concluir a venda.",
-      );
-      return;
+    if(processoPendente.current)return;
+    const cliente=listaClientes.find((c,i)=>obterIdCliente(c,i)===clienteSelecionado);
+    if((tipoOperacao==='fiado'&&!cliente)||(!clienteSelecionado)){
+      alert('Seleccione um cliente válido para a venda.');return;
     }
-
-    // Obter os produtos actuais
-    const produtosActuais = JSON.parse(
-      localStorage.getItem("lojix_produtos") || "[]",
-    );
-
-    // Verificar se ainda existe stock suficiente
-    const stockInsuficiente = listaCarrinho.find((item) => {
-      const produto = produtosActuais.find((p) => p.id === item.id);
-      return !produto || Number(produto.stock) < Number(item.quantidade);
-    });
-
-    if (stockInsuficiente) {
-      alert(`Stock insuficiente para ${stockInsuficiente.produto}.`);
-      return;
-    }
-
-    // Calcular o total da operação
-    const subtotalVenda = total;
-    const descontoVenda = descontoAplicado;
-    const totalVenda = totalFinal;
-
-    // Gerar o próximo código no formato #000001
-    const maiorNumeroVenda = listaVendas.reduce((maior, venda) => {
-      const correspondencia = String(venda.id ?? "").match(/^#(\d+)$/);
-
-      if (!correspondencia) {
-        return maior;
-      }
-
-      return Math.max(maior, Number(correspondencia[1]));
-    }, 0);
-
-    const novoIdVenda = `#${String(maiorNumeroVenda + 1).padStart(6, "0")}`;
-
-    // Criar o registo da venda
-    const novaVenda = {
-      id: novoIdVenda,
-      cliente: nomeClienteOperacao.trim(),
-      clienteId:
-        clienteSelecionado === "__CAIXA__"
-          ? null
-          : (clienteEncontrado?.id ?? clienteSelecionado),
-      tipo: tipoOperacao,
-      data: new Date().toLocaleDateString("pt-PT", {
-        day: "2-digit",
-        month: "numeric",
-        year: "numeric",
-      }),
-      produtos: listaCarrinho.map((p) => ({
-        ...p,
-      })),
-      subtotal: subtotalVenda,
-      desconto: descontoVenda,
-      total: totalVenda,
-      estado: tipoOperacao === "fiado" ? "Pendente" : "Pago",
-      valorPago: tipoOperacao === "fiado" ? 0 : totalVenda,
-      valorEmDivida: tipoOperacao === "fiado" ? totalVenda : 0,
-      vendedor: vendedor.username,
-    };
-
-    // Actualizar o stock dos produtos
-    const produtosActualizados = produtosActuais.map((produto) => {
-      const produtoVendido = listaCarrinho.find((p) => p.id === produto.id);
-
-      if (!produtoVendido) {
-        return produto;
-      }
-
-      return {
-        ...produto,
-        stock: Number(produto.stock) - Number(produtoVendido.quantidade),
-      };
-    });
-
-    // Guardar os novos stocks
-    localStorage.setItem(
-      "lojix_produtos",
-      JSON.stringify(produtosActualizados),
-    );
-
-    // Adicionar a operação ao histórico de vendas
-    setListaVendas((vendas) => {
-      return [...vendas, novaVenda];
-    });
-
-    // Limpar o carrinho
-    setListaCarrinho([]);
-    setDesconto("0");
-
-    // Fechar o modal
-    setModalAberto(false);
-
-    // Limpar a selecção do cliente
-    setClienteSelecionado("");
-
-    alert(
-      tipoOperacao === "fiado"
-        ? "Fiado registado com sucesso!"
-        : "Venda realizada com sucesso!",
-    );
+    processoPendente.current=true;setProcessando(true);
+    try{
+      await registarVenda({itens:listaCarrinho,clienteId:clienteSelecionado,tipo:tipoOperacao,desconto:descontoAplicado});
+      const lista=await listarProdutos();setProdutos(lista);
+      setListaCarrinho([]);setDesconto('0');setModalAberto(false);setClienteSelecionado('');
+      alert(tipoOperacao==='fiado'?'Fiado registado com sucesso!':'Venda realizada com sucesso!');
+    }catch(erro){alert('Erro ao concluir venda: '+erro.message)}
+    finally{processoPendente.current=false;setProcessando(false)}
   }
 
   return (
@@ -542,7 +403,7 @@ function Vendas() {
                 >
                   Cancelar
                 </button>
-                <button type="submit" className="btnModalConfirmar">
+                <button type="submit" disabled={processando} className="btnModalConfirmar">
                   {tipoOperacao === "fiado"
                     ? "Confirmar Fiado"
                     : "Confirmar Venda"}
