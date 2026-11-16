@@ -105,6 +105,12 @@ function nomeTipo(tipo) {
     emprestimo: "Empréstimo",
     devolucao_emprestimo: "Devolução de empréstimo",
     contagem_caixa: "Contagem de caixa",
+    historico_saldo_inicial: "Saldo inicial (histórico)",
+    historico_recebimento_venda: "Recebimento de venda (histórico)",
+    historico_compra: "Compra de stock (histórico)",
+    historico_despesa: "Despesa (histórico)",
+    historico_emprestimo: "Empréstimo concedido (histórico)",
+    historico_devolucao_emprestimo: "Pagamento de empréstimo (histórico)",
   };
 
   return nomes[tipo] || tipo;
@@ -173,7 +179,8 @@ function Caixa() {
       .filter(
         (venda) =>
           venda.tipo === "venda" &&
-          venda.estado !== "Cancelada"
+          venda.estado !== "Cancelada" &&
+          !venda.historicoImportacao
       )
       .reduce(
         (total, venda) =>
@@ -186,7 +193,8 @@ function Caixa() {
     return movimentos
       .filter(
         (movimento) =>
-          movimento.tipo === "recebimento_fiado"
+          movimento.tipo === "recebimento_fiado" &&
+          !movimento.historicoImportacao
       )
       .reduce(
         (total, movimento) =>
@@ -197,7 +205,7 @@ function Caixa() {
 
   const outrasEntradas = useMemo(() => {
     return movimentos
-      .filter((movimento) => movimento.tipo === "entrada")
+      .filter((movimento) => movimento.tipo === "entrada" && !movimento.historicoImportacao)
       .reduce(
         (total, movimento) =>
           total + Number(movimento.valor || 0),
@@ -207,7 +215,7 @@ function Caixa() {
 
   const totalDespesas = useMemo(() => {
     return movimentos
-      .filter((movimento) => movimento.tipo === "despesa")
+      .filter((movimento) => movimento.tipo === "despesa" && !movimento.historicoImportacao)
       .reduce(
         (total, movimento) =>
           total + Number(movimento.valor || 0),
@@ -218,7 +226,7 @@ function Caixa() {
   const totalLevantamentos = useMemo(() => {
     return movimentos
       .filter(
-        (movimento) => movimento.tipo === "levantamento"
+        (movimento) => movimento.tipo === "levantamento" && !movimento.historicoImportacao
       )
       .reduce(
         (total, movimento) =>
@@ -230,7 +238,7 @@ function Caixa() {
   const totalEmprestimos = useMemo(() => {
     return movimentos
       .filter(
-        (movimento) => movimento.tipo === "emprestimo"
+        (movimento) => movimento.tipo === "emprestimo" && !movimento.historicoImportacao
       )
       .reduce(
         (total, movimento) =>
@@ -243,7 +251,8 @@ function Caixa() {
     return movimentos
       .filter(
         (movimento) =>
-          movimento.tipo === "devolucao_emprestimo"
+          movimento.tipo === "devolucao_emprestimo" &&
+          !movimento.historicoImportacao
       )
       .reduce(
         (total, movimento) =>
@@ -327,7 +336,8 @@ function Caixa() {
       .filter(
         (venda) =>
           venda.tipo === "venda" &&
-          venda.estado !== "Cancelada"
+          venda.estado !== "Cancelada" &&
+          !venda.historicoImportacao
       )
       .map((venda) => ({
         id: `VENDA-${venda.id}`,
