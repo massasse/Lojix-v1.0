@@ -13,7 +13,7 @@ async function carregarDadosDashboard(){
   // Somar movimentos de determinado tipo
   const somarMovimentos = (tipo) => {
     return movimentos
-      .filter((m) => m.tipo === tipo)
+      .filter((m) => m.tipo === tipo && !m.historicoImportacao)
       .reduce((soma, m) => soma + Math.abs(Number(m.valor) || 0), 0);
   };
 
@@ -22,7 +22,7 @@ async function carregarDadosDashboard(){
     const tipo = String(venda.tipo || "").toLowerCase();
     const estado = String(venda.estado || "").toLowerCase();
 
-    if (tipo === "venda" || (!tipo && estado === "pago")) {
+    if ((tipo === "venda" || (!tipo && estado === "pago")) && !venda.historicoImportacao) {
       return soma + Number(venda.valorPago ?? venda.total ?? 0);
     }
 
@@ -37,7 +37,7 @@ async function carregarDadosDashboard(){
   const recebimentosFiados = existeMovimentoFiado
     ? somarMovimentos("recebimento_fiado")
     : vendas.reduce((soma, venda) => {
-        if (venda.tipo !== "fiado" || !Array.isArray(venda.pagamentos)) {
+        if (venda.tipo !== "fiado" || venda.historicoImportacao || !Array.isArray(venda.pagamentos)) {
           return soma;
         }
 
@@ -91,6 +91,7 @@ async function carregarDadosDashboard(){
 
   // Total geral de vendas, incluindo fiados
   const totalVendas = vendas.reduce((total, venda) => {
+    if (venda.natureza === "emprestimo") return total;
     return total + Number(venda.total ?? venda.valorPago ?? 0);
   }, 0);
 
