@@ -1,23 +1,38 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { MdArrowOutward } from "react-icons/md";
+
 import CardDashbord from "../assets/componets/CardDashbord";
 import HeaderPage from "../assets/componets/HeaderPage";
+import {
+  listarProdutos,
+  listarVendas,
+  listarMovimentos,
+} from "../lib/lojixApi";
+
 import "./StyleDashbord.css";
-import {listarProdutos,listarVendas,listarMovimentos} from "../lib/lojixApi";
 
+// ============================================================
+// 1. CARREGAMENTO E CÁLCULO DOS DADOS DO DASHBOARD
+// ============================================================
 
+async function carregarDadosDashboard() {
+  const [produtos, vendas, movimentos] = await Promise.all([
+    listarProdutos(),
+    listarVendas(),
+    listarMovimentos(),
+  ]);
 
+  // Soma os movimentos financeiros de um tipo específico.
+  const somarMovimentos = (tipo) =>
+    movimentos
+      .filter((movimento) => movimento.tipo === tipo)
+      .reduce(
+        (soma, movimento) =>
+          soma + Math.abs(Number(movimento.valor) || 0),
+        0
+      );
 
-async function carregarDadosDashboard(){
-  const [produtos,vendas,movimentos]=await Promise.all([listarProdutos(),listarVendas(),listarMovimentos()]);
-
-  // Somar movimentos de determinado tipo
-  const somarMovimentos = (tipo) => {
-    return movimentos
-      .filter((m) => m.tipo === tipo)
-      .reduce((soma, m) => soma + Math.abs(Number(m.valor) || 0), 0);
-  };
-
-  // Total de vendas pagas
+  // Total das vendas pagas.
   const vendasPagas = vendas.reduce((soma, venda) => {
     const tipo = String(venda.tipo || "").toLowerCase();
     const estado = String(venda.estado || "").toLowerCase();
@@ -29,40 +44,43 @@ async function carregarDadosDashboard(){
     return soma;
   }, 0);
 
-  // Recebimentos de fiados
+  // Recebimentos de vendas fiadas.
+  // Se existirem movimentos próprios de recebimento, usa-os.
+  // Caso contrário, consulta os pagamentos guardados nas vendas.
   const existeMovimentoFiado = movimentos.some(
-    (m) => m.tipo === "recebimento_fiado"
+    (movimento) => movimento.tipo === "recebimento_fiado"
   );
 
   const recebimentosFiados = existeMovimentoFiado
     ? somarMovimentos("recebimento_fiado")
     : vendas.reduce((soma, venda) => {
-        if (venda.tipo !== "fiado" || !Array.isArray(venda.pagamentos)) {
+        if (
+          venda.tipo !== "fiado" ||
+          !Array.isArray(venda.pagamentos)
+        ) {
           return soma;
         }
 
-        return soma + venda.pagamentos.reduce(
+        const totalRecebido = venda.pagamentos.reduce(
           (total, pagamento) =>
             total + (Number(pagamento.valor) || 0),
           0
         );
+
+        return soma + totalRecebido;
       }, 0);
 
-  // Saldo inicial
+  // Entradas de caixa.
   const saldoInicial = somarMovimentos("saldo_inicial");
-
-  // Outras entradas
   const outrasEntradas = somarMovimentos("entrada");
-
-  // Devoluções de empréstimos
   const devolucoes = somarMovimentos("devolucao_emprestimo");
 
-  // Saídas
+  // Saídas de caixa.
   const despesas = somarMovimentos("despesa");
   const levantamentos = somarMovimentos("levantamento");
   const emprestimos = somarMovimentos("emprestimo");
 
-  // Saldo disponível na caixa
+  // Saldo actualmente disponível na caixa.
   const saldo =
     saldoInicial +
     vendasPagas +
@@ -73,26 +91,32 @@ async function carregarDadosDashboard(){
     levantamentos -
     emprestimos;
 
-  // Valor total do stock
-  const valorStockTotal = produtos.reduce((total, p) => {
-    return total + (Number(p.stock) || 0) * (Number(p.venda) || 0);
+  // Valor potencial do stock, calculado pelo preço de venda.
+  const valorStockTotal = produtos.reduce((total, produto) => {
+    const quantidade = Number(produto.stock) || 0;
+    const precoVenda = Number(produto.venda) || 0;
+
+    return total + quantidade * precoVenda;
   }, 0);
 
-  // Dívidas ainda por receber
+  // Dívidas que ainda estão por receber.
   const areceber = vendas.reduce((total, venda) => {
-    const divida = venda.valorEmDivida != null
-      ? Number(venda.valorEmDivida)
-      : venda.tipo === "fiado"
-        ? Number(venda.total || 0) - Number(venda.valorPago || 0)
-        : 0;
+    const divida =
+      venda.valorEmDivida != null
+        ? Number(venda.valorEmDivida)
+        : venda.tipo === "fiado"
+          ? Number(venda.total || 0) - Number(venda.valorPago || 0)
+          : 0;
 
     return total + Math.max(0, divida || 0);
   }, 0);
 
-  // Total geral de vendas, incluindo fiados
-  const totalVendas = vendas.reduce((total, venda) => {
-    return total + Number(venda.total ?? venda.valorPago ?? 0);
-  }, 0);
+  // Volume total de vendas, incluindo vendas a crédito.
+  const totalVendas = vendas.reduce(
+    (total, venda) =>
+      total + Number(venda.total ?? venda.valorPago ?? 0),
+    0
+  );
 
   return {
     produtos,
@@ -104,32 +128,63 @@ async function carregarDadosDashboard(){
   };
 }
 
+// ============================================================
+// 2. FUNÇÕES AUXILIARES DE FORMATAÇÃO
+// ============================================================
+
 function formatarMT(valor) {
-  return `${Number(valor || 0).toLocaleString("pt-MZ", {
+  const numero = Number(valor) || 0;
+
+  return `${numero.toLocaleString("pt-MZ", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   })} MT`;
 }
 
-function Dashbord() {
-   const [dados,setDados]=useState({produtos:[],vendas:[],saldo:0,valorStockTotal:0,areceber:0,totalVendas:0});
+// ============================================================
+// 3. COMPONENTE PRINCIPAL DO DASHBOARD
+// ============================================================
 
-  // Actualizar os dados quando regressar ao Dashboard
+function Dashbord() {
+  // 3.1. Estado dos dados apresentados no Dashboard.
+  const [dados, setDados] = useState({
+    produtos: [],
+    vendas: [],
+    saldo: 0,
+    valorStockTotal: 0,
+    areceber: 0,
+    totalVendas: 0,
+  });
+
+  // 3.2. Carrega e actualiza os dados ao abrir/regressar à página.
   useEffect(() => {
-    const actualizar = () => {
-      carregarDadosDashboard().then(setDados).catch(e=>console.error("Erro no Dashboard:",e));
+    let activo = true;
+
+    const actualizar = async () => {
+      try {
+        const novosDados = await carregarDadosDashboard();
+
+        if (activo) {
+          setDados(novosDados);
+        }
+      } catch (erro) {
+        console.error("Erro ao carregar o Dashboard:", erro);
+      }
     };
 
     actualizar();
+
     window.addEventListener("focus", actualizar);
     window.addEventListener("storage", actualizar);
 
     return () => {
+      activo = false;
       window.removeEventListener("focus", actualizar);
       window.removeEventListener("storage", actualizar);
     };
   }, []);
 
+  // 3.3. Separa os dados recebidos da API.
   const {
     produtos,
     vendas: arrayVendas,
@@ -139,185 +194,187 @@ function Dashbord() {
     totalVendas,
   } = dados;
 
-  const produtosFiltrados = produtos.filter((p) => Number(p.stock) > 0);
+  // 3.4. Apresenta apenas produtos com stock disponível.
+  const produtosFiltrados = produtos.filter(
+    (produto) => Number(produto.stock) > 0
+  );
 
-  // Esta Variavel Reorganiza o historico de venda na ordem Decrescente dos IDs
+  // 3.5. Ordena o histórico pelas identificações mais recentes.
   const historico = [...arrayVendas].sort((a, b) =>
-  b.id.localeCompare(a.id, undefined, { numeric: true })
-);
+    String(b.id ?? "").localeCompare(String(a.id ?? ""), undefined, {
+      numeric: true,
+    })
+  );
 
-//--------------------------------------------------------------------------------
-//--------------------------------------------------------------------------------
+  // ==========================================================
+  // 4. ESTRUTURA VISUAL DO DASHBOARD
+  // ==========================================================
 
   return (
     <div className="content">
-      <HeaderPage page="Dashbord" />
+      <HeaderPage page="Dashboard" />
+
       <main className="contentDashbordPage">
-        <div className="cards">
+        {/* 4.1. Cartões de indicadores financeiros. */}
+        <section className="cards" aria-label="Resumo financeiro">
+          <CardDashbord
+            titulo="Saldo disponível"
+            valor={formatarMT(saldo)}
+          />
 
-  <CardDashbord
-    titulo="Saldo disponível"
-    valor={formatarMT(saldo)}
-  />
+          <CardDashbord
+            titulo="Saldo em Stock"
+            valor={formatarMT(valorStockTotal)}
+          />
 
-  <CardDashbord
-    titulo="Saldo em Stock"
-    valor={formatarMT(valorStockTotal)}
-  />
+          <CardDashbord
+            titulo="A receber"
+            valor={formatarMT(areceber)}
+          />
 
-  <CardDashbord
-    titulo="A receber"
-    valor={formatarMT(areceber)}
-  />
+          <CardDashbord
+            titulo="Total de vendas"
+            valor={formatarMT(totalVendas)}
+          />
+        </section>
 
-  <CardDashbord
-    titulo="Total de vendas"
-    valor={formatarMT(totalVendas)}
-  />
-
-</div>
-        <div className="contentDashbord">
-          {
-            // HISTORICO
-          }
+        {/* 4.2. Histórico de vendas e produtos disponíveis. */}
+        <section className="contentDashbord">
+          {/* 4.2.1. Últimas vendas registadas. */}
           <div className="containerTableHistorico styleScrollBar">
-            <h2 className="Cardtitulos">Ultimas Vendas</h2>
-            <table className="tableHistoricoVenda">
-              <thead>
-                <tr>
-                  <th>CÓDIGO</th>
-                  <th>CLIENTE</th>
-                  <th>VENDEDOR</th>
-                  <th>QTD.</th>
-                  <th>TOTAL</th>
-                  <th>ESTADO</th>
-                </tr>
-              </thead>
+            <div className="headerHistorico">
+              <h2 className="Cardtitulos">Últimas vendas</h2>
 
-              <tbody>
-                {historico.length === 0 ? (
-                  <tr>
-                    <td className="info" colSpan={6}>
-                      Sem registo
-                    </td>
-                  </tr>
-                ) : (
-                  historico.map((p) => {
-                    // Calcular quantidade total de unidades
-                    const totalItens = Array.isArray(p.produtos)
-                      ? p.produtos.reduce(
-                          (total, item) => total + Number(item.quantidade || 0),
-                          0,
-                        )
-                      : Number(p.quantidade || 0);
+              <a className="linkRapido" href="/principal/vendas">
+                Nova venda <MdArrowOutward />
+              </a>
+            </div>
 
-                    // Valor total da venda
-                    const totalVenda = Number(
-                      p.total ?? p.valorTotal ?? p.valorPago ?? 0,
-                    );
+            {historico.length === 0 ? (
+              <div className="info">Sem registo de vendas.</div>
+            ) : (
+              historico.map((venda) => {
+                // Quantidade total de unidades vendidas.
+                const totalItens = Array.isArray(venda.produtos)
+                  ? venda.produtos.reduce(
+                      (total, item) =>
+                        total + Number(item.quantidade || 0),
+                      0
+                    )
+                  : Number(venda.quantidade || 0);
 
-                    // Valor já recebido
-                    const valorPago = Number(
-                      p.valorPago ?? (p.estado === "Pago" ? totalVenda : 0),
-                    );
+                // Valor total da operação.
+                const totalVenda = Number(
+                  venda.total ??
+                    venda.valorTotal ??
+                    venda.valorPago ??
+                    0
+                );
 
-                    // Valor ainda em dívida
-                    const valorDivida = Number(
-                      p.valorEmDivida ?? Math.max(totalVenda - valorPago, 0),
-                    );
+                // Valor já recebido do cliente.
+                const valorPago = Number(
+                  venda.valorPago ??
+                    (String(venda.estado || "").toLowerCase() === "pago"
+                      ? totalVenda
+                      : 0)
+                );
 
-                    // Determinar estado real da operação
-                    let estado;
+                // Valor que continua em dívida.
+                const valorDivida = Number(
+                  venda.valorEmDivida ??
+                    Math.max(totalVenda - valorPago, 0)
+                );
 
-                    if (
-                      p.estado === "Pago" ||
-                      (totalVenda > 0 &&
-                        (valorDivida <= 0 || valorPago >= totalVenda))
-                    ) {
-                      estado = "Pago";
-                    } else if (valorPago > 0) {
-                      estado = "Pendente";
-                    } else {
-                      estado = "Por pagar";
-                    }
+                // Determina o estado financeiro da venda.
+                let estado;
 
-                    const classeEstado = estado
-                      .toLowerCase()
-                      .replace(/\s+/g, "-");
+                if (
+                  String(venda.estado || "").toLowerCase() === "pago" ||
+                  (totalVenda > 0 &&
+                    (valorDivida <= 0 || valorPago >= totalVenda))
+                ) {
+                  estado = "Pago";
+                } else if (valorPago > 0) {
+                  estado = "Pendente";
+                } else {
+                  estado = "Por pagar";
+                }
 
-                    return (
-                      <tr key={p.id}>
-                        <td className="tdstyleID">
-                          <p>{p.id}</p>
-                          <p className="tdstyleData">{p.data}</p>
-                        </td>
+                const classeEstado = estado
+                  .toLowerCase()
+                  .replace(/\s+/g, "-");
 
-                        <td>{p.cliente}</td>
+                return (
+                  <article key={venda.id} className="central">
+                    <div className="coluna1">
+                      <div className="colCliente">{venda.cliente}</div>
 
-                        <td>{p.vendedor}</td>
+                      <div className="tdstyleData">
+                        <span>{venda.data}</span>
+                        <span aria-hidden="true">|</span>
+                        <span>{venda.id}</span>
+                        <span aria-hidden="true">|</span>
+                        <span>{totalItens} uni.</span>
+                      </div>
+                    </div>
 
-                        <td>
-                          <span className="QuantidadeItens">{totalItens}</span>
-                        </td>
+                    <div className="coluna2">
+                      <div className="colTotal">{formatarMT(totalVenda)}</div>
 
-                        <td className="ValorHistorico">
-                          {totalVenda.toLocaleString("pt-MZ", {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          })}{" "}
-                          MT
-                        </td>
-
-                        <td>
-                          <span className={`StatusVenda ${classeEstado}`}>
-                            {estado}
-                          </span>
-                        </td>
-                      </tr>
-                    );
-                  })
-                )}
-              </tbody>
-            </table>
+                      <span className={`StatusVenda ${classeEstado}`}>
+                        {estado}
+                      </span>
+                    </div>
+                  </article>
+                );
+              })
+            )}
           </div>
+
+          {/* 4.2.2. Produtos que ainda têm stock. */}
           <div className="containerTableProdutoDisponivel styleScrollBar">
-            <h2 className="Cardtitulos">Pordutos diponiveis</h2>
-            <table className="tableProdutoDisponivel">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>PRODUTO</th>
-                  <th>CATEGORIA</th>
-                  <th>QNT</th>
-                  <th>VALOR</th>
-                </tr>
-              </thead>
-              <tbody>
-                {produtosFiltrados.length === 0 ? (
-                  <tr>
-                    <td className="info" colSpan={5}>
-                      Nenhum produto disponivel.
-                    </td>
-                  </tr>
-                ) : (
-                  produtosFiltrados.map((p) => (
-                    <tr key={p.id}>
-                      <td className="tdstyleID">{p.id}</td>
-                      <td>
-                        <strong>{p.produto}</strong>
-                      </td>
-                      <td>{p.categria}</td>
-                      <td >{p.stock}</td>
-                      <td>{p.venda}MT</td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+            <div className="headerHistorico">
+              <h2 className="Cardtitulos">Produtos disponíveis</h2>
+
+              <a className="linkRapido" href="/principal/produtos">
+                Ver todos <MdArrowOutward />
+              </a>
+            </div>
+
+            {produtosFiltrados.length === 0 ? (
+              <div className="info">Nenhum produto disponível.</div>
+            ) : (
+              produtosFiltrados.map((produto) => (
+                <article key={produto.id} className="central">
+                  <div className="colpro1">
+                    <div className="colProduto">{produto.produto}</div>
+
+                    <div className="tdstyleData">
+                      <span>#{produto.id}</span>
+                      <span aria-hidden="true">|</span>
+                      <span>{produto.categoria}</span>
+                      <span aria-hidden="true">|</span>
+                      <span>{produto.marca}</span>
+                    </div>
+                  </div>
+
+                  <div className="colpro2">
+                    <div className="colvenda">
+                      {formatarMT(produto.venda)}
+                    </div>
+
+                    <span className="StatusVenda QuantidadeItens">
+                      Qnt: {produto.stock}
+                    </span>
+                  </div>
+                </article>
+              ))
+            )}
           </div>
-        </div>
+        </section>
       </main>
     </div>
   );
 }
+
 export default Dashbord;

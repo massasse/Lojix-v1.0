@@ -1,17 +1,20 @@
+/* ============================================================
+   1. ESTRUTURA GERAL DA PÁGINA DE VENDAS
+   ============================================================ */
+
 .contentVenda {
-  height: 100%;
-  min-height: 0;
   display: flex;
   flex-direction: column;
+  height: 100%;
+  min-height: 0;
   overflow: hidden;
 }
 
-
 .ContainerVendas {
-  flex: 1;
-  min-height: 0;
   display: grid;
   grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  flex: 1;
+  min-height: 0;
   gap: 10px;
   overflow: hidden;
 }
@@ -19,136 +22,142 @@
 .Vendas {
   display: flex;
   flex-direction: column;
-  min-height: 0;
   min-width: 0;
+  min-height: 0;
   gap: 10px;
 }
 
-.ContainerStore {
-  flex: 1;
-  min-height: 0;
-  min-width: 0;
-  max-height: 447px;
+/* ============================================================
+   2. CATÁLOGO E GRELHA DE PRODUTOS
+   ============================================================ */
 
+.ContainerStore {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
-
-  background-color: #f8fafc;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  max-height: 447px;
   padding: 0 17px;
-  border-radius: 10px;
   overflow: auto;
+  background: #f8fafc;
+  border-radius: 10px;
 }
 
 .Cardtitulos {
   position: sticky;
   top: 0;
+  margin: 0;
+  padding: 20px 0 12px;
   font-size: 16px;
   font-weight: 800;
-  padding: 20px 0px 5px 0px;
-  margin: 0;
-
 }
 
-/* Grelha dos produtos */
+/* Grelha que apresenta os produtos disponíveis. */
 .comProdutos {
-  min-height: 0;
-  
-  overflow-y: auto;
-
   display: grid;
-  grid-template-columns: repeat(auto-fill,
-      minmax(130px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
   grid-auto-rows: max-content;
   align-content: start;
+  min-height: 0;
   gap: 10px;
   padding: 10px 0;
+  overflow-y: auto;
 }
 
-/* Mensagem quando não existem produtos */
+/* Mensagem apresentada quando não existem produtos. */
 .semProdutos {
-  min-height: 0;
   display: grid;
   place-items: center;
+  min-height: 0;
   color: #64748b;
 }
 
-/* Cards */
+/* Cartão individual de cada produto. */
 .VendasProdutosCards {
   display: flex;
-  flex-flow: column;
-
+  flex-direction: column;
+  min-width: 0;
   padding: 16px;
+  text-align: left;
+  background: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 10px;
-  background-color: #ffffff;
   cursor: pointer;
-  transition: transform 0.4s ease,
-    box-shadow 0.4s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .VendasProdutosCards:hover {
-  transform: scale(1.002);
+  transform: translateY(-2px);
+  border-color: #2563eb;
   box-shadow: 0 4px 12px rgb(0 0 0 / 8%);
-  border: 1px solid #2563eb;
 }
 
+/* Área do ícone e indicação de stock. */
 .pIcon {
   display: flex;
-  flex-flow: column;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
   width: 100%;
   height: 100px;
-  background-color: #f8fafc;
+  color: #595959;
+  background: #f8fafc;
   border-radius: 10px;
   font-size: 20px;
-  color: #595959;
-}
-
-.pName {
-  font-weight: 600;
-  padding: 5px 0px 2px 0px;
-  text-align: start;
-  font-size: 12px;
-}
-
-.pInfo {
-  color: #707070;
-  text-align: start;
-  font-size: 9px;
-}
-
-/*.containerPrice{
-    display: flex;
-    justify-content: space-between;
-    text-align: start;
-}*/
-.pPrice {
-  text-align: start;
-  font-size: 12px;
-  font-weight: 600;
-  margin-top: 8px;
 }
 
 .pStock {
   position: relative;
-  bottom: -25px;
   right: -30px;
+  bottom: -25px;
+  padding: 5px;
+  color: #ffffff;
+  background: #2563eb;
+  border-radius: 10px;
   font-size: 9px;
   font-weight: 600;
-  color: #fff;
-  background-color: #2563eb;
-  padding: 5px;
-  border-radius: 10px;
 }
 
+.pName {
+  padding: 5px 0 2px;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: start;
+  overflow-wrap: anywhere;
+}
+
+.pInfo {
+  color: #707070;
+  font-size: 9px;
+  text-align: start;
+  overflow-wrap: anywhere;
+}
+
+.containerPrice {
+  display: flex;
+  justify-content: space-between;
+  text-align: start;
+}
+
+.pPrice {
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: start;
+}
+
+/* ============================================================
+   3. CARRINHO DE COMPRAS
+   ============================================================ */
 
 .ContainerCarrinho {
-  background-color: #f8fafc;
-  border-radius: 10px;
-  padding: 0px 17px 17px 17px;
   display: grid;
-  grid-template-rows: auto 2fr auto auto;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  min-width: 0;
+  padding: 0 17px 17px;
+  background: #f8fafc;
+  border-radius: 10px;
 }
 
 .CarrinhoBody {
@@ -157,278 +166,133 @@
   overflow-y: auto;
 }
 
-
-.comProduto{
-  min-height: 0;
-  max-height: 299.33px;
-  overflow-y: auto;
-
+.comProduto {
   display: grid;
-  grid-template-columns: auto;
+  grid-template-columns: minmax(0, 1fr);
   grid-auto-rows: max-content;
+  min-height: 0;
+  max-height: 299px;
+  overflow-y: auto;
 }
 
-.containerTotal {
-  padding: 10px 0px;
-  border-top: 1px solid #45444456;
-
-}
-
-.resumo{
+/* Cada produto adicionado ao carrinho. */
+.cItem {
   display: flex;
-  justify-content: space-between;
-  padding: 5px 0px;
-}
-.acoes{
-  gap: 10px;
-  display: flex;
-  justify-content: space-between;
-  padding: 5px 0px;
-}
-.btnResumo{
-  width: 100%;
-  border: none;
-  padding: 8px 25px;
-  border-radius: 8px;
-  font-weight: 600;
-  color: #f8fafc;
-  cursor: pointer;
-  background-color: #2563eb;
-  
-}
-
-.btnResumo:hover{
-background-color: #2564ebd3;
-}
-
-
-.cItem{
-  display: flex;
-  flex-flow: column;
+  flex-direction: column;
   gap: 2px;
-  background-color: #f8fafc ;
   padding: 5px 2px;
+  background: #f8fafc;
 }
 
-.cHead{
+.cHead {
   display: flex;
-  justify-content: space-between;
-}
-.cBody{
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 10px;
-  justify-items: start;
   align-items: center;
+  justify-content: space-between;
+  gap: 8px;
 }
-.cHead>.ctitle{
+
+.cHead .ctitle {
+  margin: 0;
   font-size: 14px;
   font-weight: 600;
+  overflow-wrap: anywhere;
 }
-.cHead>.btnD{
-   width: 20px;
-  height: 20px;
-  background-color:#f8fafc;
-  color: #dc2626;
-  font-weight: 600 ;
-  font-size: 12px;
-  border:none;
-  text-align: center;
-  cursor: pointer;
-}
-.cBody>.price{
-  font-size: 12px;
-  color: #707070;
-}
-.cBody>span{
+
+.cHead .btnD {
   display: grid;
-  grid-template-columns: repeat(3,1fr);
-  justify-items: center;
-  align-items: center;
-  gap: 5px;
-  font-weight: 600;
-  font-size: 16px;
-  color: #2563eb;
-}
-.cBody>span>.btnAR{
-  width: 20px;
-  height: 20px;
-  background-color: #f8fafc;
-  color: #000;
-  font-weight: 600 ;
-  font-size: 16px;
-  border:none;
-  text-align: center;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  color: #dc2626;
+  background: transparent;
+  border: none;
   cursor: pointer;
 }
 
-/* Fundo do modal */
-.modalOverlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.55);
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    z-index: 9999;
-    padding: 20px;
+.cBody {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
 }
 
-/* Corpo do modal */
-.modalVenda {
-    width: 100%;
-    max-width: 420px;
-
-    background: #ffffff;
-    padding: 25px;
-    border-radius: 14px;
-
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
-    animation: aparecerModal 0.2s ease;
+.cBody .price {
+  margin: 0;
+  color: #707070;
+  font-size: 12px;
+  overflow-wrap: anywhere;
 }
 
-/* Cabeçalho */
-.modalVendaHeader {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    margin-bottom: 25px;
+.cBody > span {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: center;
+  justify-items: center;
+  gap: 5px;
+  color: #2563eb;
+  font-size: 16px;
+  font-weight: 600;
 }
 
-.modalVendaHeader h2 {
-    font-size: 20px;
-    margin: 0;
-    color: #222;
+.cBody > span .btnAR {
+  width: 24px;
+  height: 24px;
+  color: #000000;
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
 }
 
-.modalVendaHeader button {
-    border: none;
-    background: transparent;
-
-    font-size: 27px;
-    cursor: pointer;
-    color: #555;
+.totalPrice {
+  margin: 0;
+  font-size: 12px;
 }
 
-/* Formulário */
-.modalVenda form {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+/* ============================================================
+   4. RESUMO FINANCEIRO E BOTÕES DE OPERAÇÃO
+   ============================================================ */
+
+.containerTotal {
+  padding: 10px 0;
+  border-top: 1px solid #45444456;
 }
 
-.modalVenda label {
-    font-size: 14px;
-    font-weight: 600;
-    color: #333;
+.resumo {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 5px 0;
 }
 
-.modalVenda input {
-    width: 100%;
-    padding: 13px;
-
-    border: 1px solid #ddd;
-    border-radius: 8px;
-
-    outline: none;
-    font-size: 14px;
-    box-sizing: border-box;
+.resumo p {
+  margin: 0;
 }
 
-.modalVenda input:focus {
-    border-color: #2563eb;
+.acoes {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 5px 0;
 }
 
-/* Resumo */
-.modalResumo {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    padding: 15px 0;
-    margin-top: 10px;
-
-    border-top: 1px solid #eee;
-    font-size: 14px;
+.btnResumo {
+  width: 100%;
+  padding: 8px 25px;
+  color: #f8fafc;
+  background: #2563eb;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
 }
 
-.modalResumo strong {
-    font-size: 17px;
-    color: #2563eb;
+.btnResumo:hover {
+  background: #1d4ed8;
 }
 
-/* Aviso de fiado */
-.avisoFiado {
-    background: #fff7e6;
-    color: #a16207;
-
-    padding: 12px;
-    border-radius: 8px;
-    font-size: 13px;
-}
-
-/* Botões */
-.modalAcoes {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-
-    margin-top: 15px;
-}
-
-.modalAcoes button {
-    padding: 11px 16px;
-    border-radius: 8px;
-    border: none;
-
-    font-weight: 600;
-    cursor: pointer;
-}
-
-.btnModalCancelar {
-    background: #eee;
-    color: #333;
-}
-
-.btnModalConfirmar {
-    background: #2563eb;
-    color: white;
-}
-
-.btnModalConfirmar:hover {
-    background: #1d4ed8;
-}
-
-@keyframes aparecerModal {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.modalVenda select {
-    width: 100%;
-    padding: 13px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    outline: none;
-    font-size: 14px;
-    box-sizing: border-box;
-    background: #fff;
-}
-
-.modalVenda select:focus {
-    border-color: #2563eb;
-}
-
+/* Campo de desconto. */
 .desconto {
   display: flex;
   align-items: center;
@@ -443,9 +307,10 @@ background-color: #2564ebd3;
 }
 
 .desconto input {
+  box-sizing: border-box;
   width: 110px;
   padding: 9px 12px;
-  border: 1px solid #ddd;
+  border: 1px solid #dddddd;
   border-radius: 8px;
   outline: none;
   font-size: 14px;
@@ -456,219 +321,366 @@ background-color: #2564ebd3;
   border-color: #16834a;
 }
 
+/* ============================================================
+   5. MODAL DE CONFIRMAÇÃO
+   ============================================================ */
 
+.modalOverlay {
+  position: fixed;
+  z-index: 9999;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.55);
+}
 
-/* ================================
-   RESPONSIVIDADE DA PÁGINA VENDAS
-================================ */
+.modalVenda {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 420px;
+  padding: 25px;
+  overflow-y: auto;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+  animation: aparecerModal 0.2s ease;
+}
 
-/* TABLETS */
+.modalVendaHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 25px;
+}
+
+.modalVendaHeader h2 {
+  margin: 0;
+  color: #222222;
+  font-size: 20px;
+}
+
+.modalVendaHeader button {
+  color: #555555;
+  background: transparent;
+  border: none;
+  font-size: 27px;
+  cursor: pointer;
+}
+
+/* Formulário e campos do modal. */
+.modalVenda form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modalVenda label {
+  color: #333333;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.modalVenda input,
+.modalVenda select {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 13px;
+  background: #ffffff;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  outline: none;
+  font-size: 14px;
+}
+
+.modalVenda input:focus,
+.modalVenda select:focus {
+  border-color: #2563eb;
+}
+
+/* Resumo dos valores dentro do modal. */
+.modalResumo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 10px;
+  padding: 15px 0;
+  border-top: 1px solid #eeeeee;
+  font-size: 14px;
+}
+
+.modalResumo strong {
+  color: #2563eb;
+  font-size: 17px;
+}
+
+/* Avisos apresentados nas operações a crédito. */
+.avisoFiado {
+  padding: 12px;
+  color: #a16207;
+  background: #fff7e6;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+/* Botões do modal. */
+.modalAcoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.modalAcoes button {
+  padding: 11px 16px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btnModalCancelar {
+  color: #333333;
+  background: #eeeeee;
+}
+
+.btnModalConfirmar {
+  color: #ffffff;
+  background: #2563eb;
+}
+
+.btnModalConfirmar:hover {
+  background: #1d4ed8;
+}
+
+.btnModalConfirmar:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* Animação de entrada do modal. */
+@keyframes aparecerModal {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================
+   6. RESPONSIVIDADE — TABLETS
+   ============================================================ */
+
 @media (max-width: 1024px) {
+  .ContainerVendas {
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    gap: 10px;
+  }
 
-    .ContainerVendas {
-        grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
-        gap: 10px;
-    }
+  .comProdutos {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 
-    .comProdutos {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
+  .ContainerCarrinho {
+    min-width: 0;
+    padding: 0 12px 12px;
+  }
 
-    .ContainerCarrinho {
-        min-width: 0;
-        padding: 0 12px 12px;
-    }
+  .VendasProdutosCards {
+    padding: 12px;
+  }
 
-    .VendasProdutosCards {
-        padding: 12px;
-    }
+  .cBody {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 5px;
+  }
 
-    .cBody {
-        grid-template-columns: 1fr;
-        gap: 5px;
-    }
-
-    .cBody > span {
-        width: 100%;
-    }
+  .cBody > span {
+    width: 100%;
+  }
 }
 
-/* MOBILE */
+/* ============================================================
+   7. RESPONSIVIDADE — TELEMÓVEIS
+   ============================================================ */
+
 @media (max-width: 640px) {
+  .contentVenda {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    min-height: 100%;
+    overflow: visible;
+  }
 
-    .contentVenda {
-        height: auto;
-        min-height: 100%;
-        overflow: visible;
-        display: flex;
-        flex-direction: column;
-    }
+  .ContainerVendas {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    gap: 15px;
+    overflow: visible;
+  }
 
-    .ContainerVendas {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        min-height: 0;
-        overflow: visible;
-    }
+  .Vendas {
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+  }
 
-    .Vendas {
-        width: 100%;
-        min-width: 0;
-        min-height: 0;
-    }
+  .ContainerStore {
+    width: 100%;
+    max-height: none;
+    min-height: 0;
+    padding: 0 12px;
+    overflow: visible;
+  }
 
-    .ContainerStore {
-        width: 100%;
-        max-height: none;
-        min-height: 0;
-        padding: 0 12px;
-        overflow: visible;
-    }
+  .Cardtitulos {
+    padding: 15px 0 10px;
+    font-size: 16px;
+  }
 
-    .Cardtitulos {
-        font-size: 16px;
-        padding: 15px 0 10px;
-    }
+  .comProdutos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    max-height: 420px;
+    padding: 8px 0 12px;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
 
-    .comProdutos {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 10px;
-        max-height: 420px;
-        overflow-y: auto;
-        overflow-x: hidden;
-        padding: 8px 0 12px;
-    }
+  .VendasProdutosCards {
+    min-width: 0;
+    padding: 10px;
+  }
 
-    .VendasProdutosCards {
-        min-width: 0;
-        padding: 10px;
-    }
+  .pIcon {
+    height: 85px;
+    font-size: 18px;
+  }
 
-    .pIcon {
-        height: 85px;
-        font-size: 18px;
-    }
+  .pStock {
+    right: -20px;
+    bottom: -20px;
+    padding: 4px;
+    font-size: 9px;
+  }
 
-    .pStock {
-        bottom: -20px;
-        right: -20px;
-        font-size: 9px;
-        padding: 4px;
-    }
+  .pName {
+    font-size: 12px;
+    overflow-wrap: anywhere;
+  }
 
-    .pName {
-        font-size: 12px;
-        overflow-wrap: anywhere;
-    }
+  .pInfo {
+    font-size: 10px;
+    overflow-wrap: anywhere;
+  }
 
-    .pInfo {
-        font-size: 10px;
-        overflow-wrap: anywhere;
-    }
+  .pPrice {
+    font-size: 12px;
+  }
 
-    .pPrice {
-        font-size: 12px;
-    }
+  /* Carrinho em ecrãs pequenos. */
+  .ContainerCarrinho {
+    display: grid;
+    grid-template-rows: auto minmax(100px, auto) auto auto;
+    width: 100%;
+    min-height: 280px;
+    padding: 0 12px 12px;
+  }
 
-    /* CARRINHO */
+  .CarrinhoBody {
+    min-height: 100px;
+    max-height: 260px;
+    overflow-y: auto;
+  }
 
-    .ContainerCarrinho {
-        width: 100%;
-        min-height: 280px;
-        display: grid;
-        grid-template-rows: auto minmax(100px, auto) auto auto;
-        padding: 0 12px 12px;
-    }
+  .comProduto {
+    max-height: 260px;
+    overflow-y: auto;
+  }
 
-    .CarrinhoBody {
-        min-height: 100px;
-        max-height: 260px;
-        overflow-y: auto;
-    }
+  .cItem {
+    gap: 5px;
+    padding: 8px 2px;
+  }
 
-    .comProduto {
-        max-height: 260px;
-        overflow-y: auto;
-    }
+  .cHead .ctitle {
+    font-size: 13px;
+  }
 
-    .cItem {
-        padding: 8px 2px;
-        gap: 5px;
-    }
+  .cBody {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+  }
 
-    .cHead > .ctitle {
-        font-size: 13px;
-    }
+  .cBody .price {
+    font-size: 11px;
+  }
 
-    .cBody {
-        grid-template-columns: minmax(0, 1fr) auto;
-        gap: 8px;
-    }
+  .cBody > span {
+    display: flex;
+    gap: 8px;
+    font-size: 14px;
+  }
 
-    .cBody > .price {
-        font-size: 11px;
-    }
+  .containerTotal {
+    padding: 12px 0;
+  }
 
-    .cBody > span {
-        display: flex;
-        gap: 8px;
-        font-size: 14px;
-    }
+  .resumo {
+    font-size: 14px;
+  }
 
-    .containerTotal {
-        padding: 12px 0;
-    }
+  .acoes {
+    gap: 10px;
+  }
 
-    .resumo {
-        font-size: 14px;
-    }
+  .btnResumo {
+    padding: 12px 10px;
+    font-size: 13px;
+  }
 
-    .acoes {
-        gap: 10px;
-    }
+  /* Modal em ecrãs pequenos. */
+  .modalOverlay {
+    align-items: center;
+    padding: 12px;
+  }
 
-    .btnResumo {
-        padding: 12px 10px;
-        font-size: 13px;
-    }
+  .modalVenda {
+    width: 100%;
+    max-width: 420px;
+    max-height: 90dvh;
+    padding: 20px;
+    overflow-y: auto;
+  }
 
-    /* MODAL */
+  .modalVendaHeader h2 {
+    font-size: 18px;
+  }
 
-    .modalOverlay {
-        padding: 12px;
-        align-items: center;
-    }
+  .modalResumo {
+    gap: 10px;
+    font-size: 13px;
+  }
 
-    .modalVenda {
-        width: 100%;
-        max-width: 420px;
-        max-height: 90dvh;
-        overflow-y: auto;
-        padding: 20px;
-    }
+  .modalResumo strong {
+    font-size: 15px;
+  }
 
-    .modalVendaHeader h2 {
-        font-size: 18px;
-    }
+  .modalAcoes {
+    flex-direction: column-reverse;
+  }
 
-    .modalResumo {
-        gap: 10px;
-        font-size: 13px;
-    }
-
-    .modalResumo strong {
-        font-size: 15px;
-    }
-
-    .modalAcoes {
-        flex-direction: column-reverse;
-    }
-
-    .modalAcoes button {
-        width: 100%;
-        padding: 13px;
-    }
+  .modalAcoes button {
+    width: 100%;
+    padding: 13px;
+  }
 }
-

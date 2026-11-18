@@ -1,293 +1,62 @@
+/* ============================================================
+   1. ESTRUTURA GERAL DO DASHBOARD
+   ============================================================ */
+
 .content {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
 }
 
-    .info {
-        text-align: center ;
-        padding: 20px;
-        font-size: 12px;
-    }
 .contentDashbordPage {
-    flex: 1;
-    min-height: 0;
-    display: grid;
-    grid-template-rows: auto minmax(0, 1fr);
-    gap: 10px;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  flex: 1;
+  min-height: 0;
+  gap: 10px;
 }
+
+.info {
+  padding: 20px;
+  color: #64748b;
+  font-size: 12px;
+  text-align: center;
+}
+
+/* ============================================================
+   2. CARTÕES DE INDICADORES FINANCEIROS
+   ============================================================ */
 
 .cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 10px;
-}
-
-.contentDashbord {
-    display: flex;
-    gap: 10px;
-    min-height: 0;
-    overflow: auto;
-}
-
-.containerTableHistorico,.containerTableProdutoDisponivel {
-    width: 100%;
-    height: 100%;
-    border-radius: 8px;
-    padding: 0px 15px;
-    background-color: #f8fafc;
-
-    max-height: 379px;
-    overflow-y: auto;
-}
-
-
-
-.tableHistoricoVenda,.tableProdutoDisponivel{
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-}
-
-.tableHistoricoVenda th,.tableProdutoDisponivel th{
-    font-size: 12px;
-    text-align: left;
-    padding: 20px 0px 10px 0px;
-    position: sticky;
-    top: 0;
-    background-color: #f8fafc;
-}
-
-
-
-
-
-.tableHistoricoVenda tr,.tableProdutoDisponivel tr{
-    padding: 15px 0px;
-    border-bottom: 1px solid #45444456;
-}
-.tableHistoricoVenda td,.tableProdutoDisponivel td{
-    padding: 10px 0px;
-    border-bottom: 1px solid #45444456;
-    font-size: 12px;
-}
-.tdstyleID{
-    
-    display: flex;
-    flex-flow: column;
-    gap: 2px;
-    font-weight: 600;
-   
-     
-}
-.tdstyleData{
-   font-size: 9px;
-   font-weight: normal ;
-}
-
-
-/* =========================================
-   RESPONSIVIDADE COMPLETA - DASHBOARD LOJIX
-========================================= */
-
-/* TABLETS E ECRÃS MÉDIOS */
-@media screen and (max-width: 1024px) {
-
-    .content {
-        width: 100%;
-        height: auto;
-        min-height: 100%;
-    }
-
-    .contentDashbordPage {
-        display: grid;
-        grid-template-rows: auto auto;
-        gap: 15px;
-        min-height: 0;
-    }
-
-    /* Cartões financeiros */
-    .cards {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 12px;
-    }
-
-    /* Área das tabelas */
-    .contentDashbord {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        min-height: 0;
-        overflow: visible;
-    }
-
-    .containerTableHistorico,
-    .containerTableProdutoDisponivel {
-        width: 100%;
-        height: auto;
-        max-height: 350px;
-        min-height: 0;
-        overflow: auto;
-    }
-
-    .tableHistoricoVenda,
-    .tableProdutoDisponivel {
-        width: 100%;
-    }
-}
-
-
-/* =========================================
-   MOBILE - ATÉ 640PX
-========================================= */
-
-@media screen and (max-width: 640px) {
-
-    .content {
-        width: 100%;
-        height: auto;
-        min-height: 100%;
-        display: flex;
-        flex-direction: column;
-        overflow: visible;
-    }
-
-    .contentDashbordPage {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        min-height: 0;
-        gap: 15px;
-    }
-
-    /* CARTÕES DO DASHBOARD */
-
-    .cards {
-        width: 100%;
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 10px;
-    }
-
-    /* CONTEÚDO DAS TABELAS */
-
-    .contentDashbord {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        min-height: 0;
-        overflow: visible;
-    }
-
-    /* HISTÓRICO DE VENDAS */
-
-    .containerTableHistorico {
-        width: 100%;
-        height: auto;
-        max-height: 320px;
-        min-height: 0;
-        padding: 0 10px;
-        overflow-x: auto;
-        overflow-y: auto;
-        border-radius: 10px;
-    }
-
-    /* PRODUTOS DISPONÍVEIS */
-
-    .containerTableProdutoDisponivel {
-        width: 100%;
-        height: auto;
-        max-height: 320px;
-        min-height: 0;
-        padding: 0 10px;
-        overflow-x: auto;
-        overflow-y: auto;
-        border-radius: 10px;
-    }
-
-    /* TÍTULOS */
-
-    .Cardtitulos {
-        font-size: 15px;
-        padding: 15px 0 8px;
-    }
-
-    /* TABELAS */
-
-    .tableHistoricoVenda,
-    .tableProdutoDisponivel {
-        width: 100%;
-        min-width: 480px;
-        border-collapse: separate;
-        border-spacing: 0;
-    }
-
-    .tableHistoricoVenda th,
-    .tableProdutoDisponivel th {
-        font-size: 11px;
-        padding: 12px 8px;
-        white-space: nowrap;
-        position: sticky;
-        top: 0;
-        z-index: 2;
-        background-color: #f8fafc;
-    }
-
-    .tableHistoricoVenda td,
-    .tableProdutoDisponivel td {
-        font-size: 11px;
-        padding: 10px 8px;
-        white-space: nowrap;
-    }
-
-    /* CÓDIGO E DATA */
-
-    .tdstyleID {
-        gap: 3px;
-        font-size: 11px;
-    }
-
-    .tdstyleData {
-        font-size: 9px;
-    }
-
-    /* MENSAGENS */
-
-}
-
-
-/* =========================================
-   DASHBOARD - CARTÕES FINANCEIROS
-========================================= */
-
-.cards {
+  display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 14px;
 }
 
 .containerCard {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  min-width: 0;
+  padding: 22px 18px;
+  overflow: hidden;
   background: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 12px;
-  padding: 22px 18px;
-  gap: 13px;
-  min-width: 0;
   box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  overflow: hidden;
 }
 
 .containerCard::before {
-  content: "";
   position: absolute;
-  left: 0;
   top: 0;
+  left: 0;
   width: 4px;
   height: 100%;
+  content: "";
 }
 
 .containerCard:hover {
@@ -296,131 +65,167 @@
 }
 
 .containerCard .titulo {
+  color: #64748b;
   font-size: 12px;
   font-weight: 600;
-  color: #64748b;
 }
 
 .containerCard .valor {
+  overflow-wrap: anywhere;
+  color: #0f172a;
   font-size: 21px !important;
   font-weight: 700 !important;
-  color: #0f172a;
-  overflow-wrap: anywhere;
 }
 
-/* =========================================
-   DASHBOARD - TABELAS
-========================================= */
+/* ============================================================
+   3. ÁREA DE HISTÓRICO E PRODUTOS DISPONÍVEIS
+   ============================================================ */
 
 .contentDashbord {
-  gap: 14px;
+  display: flex;
   align-items: stretch;
+  min-height: 0;
+  gap: 14px;
+  overflow: hidden;
 }
 
 .containerTableHistorico,
 .containerTableProdutoDisponivel {
+  box-sizing: border-box;
   flex: 1 1 0;
   width: 0;
   min-width: 0;
+  min-height: 0;
+  height: 379px;
+  max-height: 379px;
+  padding: 0 16px 12px;
+  overflow-x: hidden;
+  overflow-y: auto;
   background: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 12px;
-  padding: 0 16px 12px;
   box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+  scrollbar-color: #94a3b8 #f8fafc;
+  scrollbar-width: thin;
+}
+
+/* Cabeçalho de cada painel. */
+.headerHistorico {
+  position: sticky;
+  z-index: 2;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .Cardtitulos {
+  margin: 0 0 5px;
+  padding: 19px 0 14px;
+  color: #0f172a;
   font-size: 15px;
   font-weight: 700;
-  color: #0f172a;
-  padding: 19px 0 14px;
-  border-bottom: 1px solid #e2e8f0;
-  margin-bottom: 5px;
 }
 
-.tableHistoricoVenda,
-.tableProdutoDisponivel {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-}
-
-.tableHistoricoVenda th,
-.tableProdutoDisponivel th {
-  background: #f8fafc;
-  color: #64748b;
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-  padding: 16px 10px;
-  white-space: nowrap;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.tableHistoricoVenda td,
-.tableProdutoDisponivel td {
-  padding: 14px 10px;
+.linkRapido {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  color: #2563eb;
   font-size: 12px;
-  color: #334155;
-  border-bottom: 1px solid #f1f5f9;
-  white-space: nowrap;
+  font-weight: 600;
+  text-decoration: none;
 }
 
-.tableHistoricoVenda tbody tr:hover,
-.tableProdutoDisponivel tbody tr:hover {
+.linkRapido:hover {
+  color: #1d4ed8;
+}
+
+/* ============================================================
+   4. LINHAS DO HISTÓRICO E DOS PRODUTOS
+   ============================================================ */
+
+.central {
+  display: flex;
+  align-items: top;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 5px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.central:hover {
   background: #f8fafc;
 }
 
-.tableHistoricoVenda tbody tr:last-child td,
-.tableProdutoDisponivel tbody tr:last-child td {
-  border-bottom: none;
+.coluna1,
+.colpro1 {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
 }
 
-/* Código e data */
-
-.tdstyleID {
-  display: table-cell;
-  font-weight: 700;
+.colCliente,
+.colProduto,
+.colTotal,
+.colvenda {
+  padding-bottom: 3px;
   color: #0f172a;
-}
-
-.tdstyleID p:first-child {
-  font-size: 11px;
+  font-size: 13px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
 }
 
 .tdstyleData {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  margin-top: 4px;
+  color: #94a3b8;
   font-size: 10px;
   font-weight: 400;
-  color: #94a3b8;
-  margin-top: 4px;
 }
 
-/* Quantidade */
-
-.QuantidadeItens {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 28px;
-  height: 25px;
-  padding: 0 7px;
-  border-radius: 6px;
-  background: #eff6ff;
-  color: #2563eb;
-  font-weight: 700;
+.coluna2,
+.colpro2 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+  flex-shrink: 0;
 }
 
-/* Valor */
 
-.ValorHistorico {
-  font-weight: 700;
-  color: #0f172a !important;
+/* ============================================================
+   4.1. CLASSES DE TABELA PRESERVADAS
+   ============================================================ */
+
+/*
+ * Estes nomes de classes são mantidos para preservar a estrutura
+ * original e evitar incompatibilidades com referências existentes.
+
+/* ============================================================
+   4.1. CLASSES ORIGINAIS DE TABELA — PRESERVADAS
+   ============================================================ */
+
+/* Mantém os nomes de classe originais para compatibilidade. */
+.tableHistoricoVenda,
+.tableProdutoDisponivel {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
 }
 
-/* =========================================
-   ESTADOS DAS VENDAS
-========================================= */
+/* ============================================================
+   5. ESTADOS DAS VENDAS E QUANTIDADE EM STOCK
+   ============================================================ */
 
 .StatusVenda {
   display: inline-flex;
@@ -434,41 +239,103 @@
 }
 
 .StatusVenda.pago {
-  background: #dcfce7;
   color: #15803d;
+  background: #dcfce7;
 }
 
 .StatusVenda.pendente {
-  background: #fef3c7;
   color: #b45309;
+  background: #fef3c7;
 }
 
 .StatusVenda.por-pagar {
-  background: #fee2e2;
   color: #dc2626;
+  background: #fee2e2;
 }
 
-/* =========================================
-   RESPONSIVIDADE
-========================================= */
+.QuantidadeItens {
+  min-width: 28px;
+  height: 25px;
+  padding: 0 7px;
+  color: #2563eb;
+  background: #eff6ff;
+  border-radius: 6px;
+}
+
+/* ============================================================
+   6. BARRA DE DESLOCAMENTO DOS PAINÉIS
+   ============================================================ */
+
+.containerTableHistorico::-webkit-scrollbar,
+.containerTableProdutoDisponivel::-webkit-scrollbar {
+  width: 6px;
+}
+
+.containerTableHistorico::-webkit-scrollbar-thumb,
+.containerTableProdutoDisponivel::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+  border-radius: 10px;
+}
+
+.containerTableHistorico::-webkit-scrollbar-track,
+.containerTableProdutoDisponivel::-webkit-scrollbar-track {
+  background: #f8fafc;
+}
+
+/* ============================================================
+   7. RESPONSIVIDADE — TABLETS
+   ============================================================ */
 
 @media (max-width: 1024px) {
+  .contentDashbordPage {
+    grid-template-rows: auto auto;
+    gap: 15px;
+  }
+
   .cards {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
   }
 
   .contentDashbord {
     flex-direction: column;
+    overflow: visible;
   }
 
   .containerTableHistorico,
   .containerTableProdutoDisponivel {
     flex: none;
     width: 100%;
+    height: 320px;
+    max-height: 320px;
   }
 }
 
+/* ============================================================
+   8. RESPONSIVIDADE — TELEMÓVEIS
+   ============================================================ */
+
 @media (max-width: 640px) {
+  .content {
+    height: auto;
+    min-height: 100%;
+    overflow: visible;
+  }
+
+  .contentDashbordPage {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 0;
+    gap: 15px;
+  }
+
+  .cards {
+    width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
   .containerCard {
     padding: 16px 13px;
   }
@@ -477,298 +344,53 @@
     font-size: 17px !important;
   }
 
-  .tableHistoricoVenda,
-  .tableProdutoDisponivel {
-    min-width: 520px;
+  .contentDashbord {
+    width: 100%;
+    flex-direction: column;
+    gap: 15px;
+    overflow: visible;
   }
 
   .containerTableHistorico,
   .containerTableProdutoDisponivel {
-    padding: 0 10px 10px;
-  }
-}
-
-/* =========================================
-   HISTÓRICO DASHBOARD - SEM SCROLL
-========================================= */
-
-.containerTableHistorico {
     width: 100%;
-    min-width: 0;
-    max-height: none;
-    height: auto;
-    padding: 0 10px 8px;
-
-    overflow-x: hidden;
-    overflow-y: visible;
-
-    box-sizing: border-box;
-}
-
-/* Tabela ocupa apenas o espaço disponível */
-.tableHistoricoVenda {
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: 100%;
-    table-layout: fixed;
-    border-collapse: collapse;
-}
-
-/* Cabeçalho compacto */
-.tableHistoricoVenda th {
-    padding: 12px 4px;
-    font-size: 9px;
-    font-weight: 700;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-/* Células compactas */
-.tableHistoricoVenda td {
-    padding: 9px 4px;
-    font-size: 10px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-/* Distribuição das colunas */
-.tableHistoricoVenda th:nth-child(1),
-.tableHistoricoVenda td:nth-child(1) {
-    width: 15%;
-}
-
-.tableHistoricoVenda th:nth-child(2),
-.tableHistoricoVenda td:nth-child(2) {
-    width: 19%;
-}
-
-.tableHistoricoVenda th:nth-child(3),
-.tableHistoricoVenda td:nth-child(3) {
-    width: 15%;
-}
-
-.tableHistoricoVenda th:nth-child(4),
-.tableHistoricoVenda td:nth-child(4) {
-    width: 9%;
-    text-align: center;
-}
-
-.tableHistoricoVenda th:nth-child(5),
-.tableHistoricoVenda td:nth-child(5) {
-    width: 19%;
-}
-
-.tableHistoricoVenda th:nth-child(6),
-.tableHistoricoVenda td:nth-child(6) {
-    width: 23%;
-}
-
-/* Código e data */
-.tableHistoricoVenda .tdstyleID {
-    display: table-cell;
-    font-size: 9px;
-    font-weight: 600;
-}
-
-.tableHistoricoVenda .tdstyleData {
-    font-size: 8px;
-    margin-top: 3px;
-}
-
-/* Valor */
-.tableHistoricoVenda .ValorHistorico {
-    font-size: 9px;
-    font-weight: 700;
-}
-
-/* Estado */
-.StatusVenda {
-    padding: 4px 5px;
-    font-size: 9px;
-    border-radius: 5px;
-    white-space: nowrap;
-}
-
-/* =========================================
-   MOBILE
-========================================= */
-
-@media (max-width: 640px) {
-
-    .containerTableHistorico {
-        width: 100%;
-        max-height: none;
-        height: auto;
-        overflow: visible;
-        padding: 0 6px 8px;
-    }
-
-    .tableHistoricoVenda {
-        width: 100% !important;
-        min-width: 0 !important;
-        table-layout: fixed;
-    }
-
-    .tableHistoricoVenda th {
-        padding: 10px 2px;
-        font-size: 8px;
-    }
-
-    .tableHistoricoVenda td {
-        padding: 9px 2px;
-        font-size: 9px;
-    }
-
-    .tableHistoricoVenda .tdstyleData {
-        font-size: 7px;
-    }
-
-    .tableHistoricoVenda .ValorHistorico {
-        font-size: 8px;
-    }
-
-    .StatusVenda {
-        padding: 3px 4px;
-        font-size: 8px;
-    }
-}
-
-
-/* =========================================
-   DASHBOARD - SCROLL VERTICAL DAS TABELAS
-========================================= */
-
-.contentDashbord {
-    min-height: 0;
-    overflow: hidden;
-    align-items: stretch;
-}
-
-/* Contentores das duas tabelas */
-.containerTableHistorico,
-.containerTableProdutoDisponivel {
-    flex: 1 1 0;
-    width: 0;
-    min-width: 0;
-
-    height: 379px;
-    max-height: 379px;
-    min-height: 0;
-
-    overflow-y: auto;
-    overflow-x: hidden;
-
-    box-sizing: border-box;
-    scrollbar-width: thin;
-    scrollbar-color: #94a3b8 #f8fafc;
-}
-
-/* Tabelas sem scroll horizontal */
-.tableHistoricoVenda,
-.tableProdutoDisponivel {
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: 100%;
-
-    table-layout: fixed;
-    border-collapse: collapse;
-}
-
-/* Cabeçalhos fixos durante o scroll */
-.tableHistoricoVenda th,
-.tableProdutoDisponivel th {
-    position: sticky;
-    top: 0;
-    z-index: 3;
-    background: #f8fafc;
-}
-
-/* Evitar que o texto aumente a largura */
-.tableHistoricoVenda td,
-.tableProdutoDisponivel td {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-/* Scrollbar vertical visível */
-.containerTableHistorico::-webkit-scrollbar,
-.containerTableProdutoDisponivel::-webkit-scrollbar {
-    display: block;
-    width: 6px;
-    height: 0;
-}
-
-.containerTableHistorico::-webkit-scrollbar-thumb,
-.containerTableProdutoDisponivel::-webkit-scrollbar-thumb {
-    background: #94a3b8;
+    height: 320px;
+    max-height: 320px;
+    padding: 0 10px 10px;
     border-radius: 10px;
-}
+  }
 
-.containerTableHistorico::-webkit-scrollbar-track,
-.containerTableProdutoDisponivel::-webkit-scrollbar-track {
-    background: #f8fafc;
-}
+  .Cardtitulos {
+    padding: 15px 0 10px;
+    font-size: 15px;
+  }
 
-/* =========================================
-   TABLET E MOBILE
-========================================= */
+  .headerHistorico {
+    padding: 0 5px;
+  }
 
-@media (max-width: 1024px) {
+  .linkRapido {
+    font-size: 11px;
+  }
 
-    .contentDashbord {
-        flex-direction: column;
-        overflow: visible;
-    }
+  .central {
+    gap: 8px;
+    padding: 10px 3px;
+  }
 
-    .containerTableHistorico,
-    .containerTableProdutoDisponivel {
-        width: 100%;
-        flex: none;
+  .colCliente,
+  .colProduto,
+  .colTotal,
+  .colvenda {
+    font-size: 12px;
+  }
 
-        height: 320px;
-        max-height: 320px;
-        min-height: 0;
+  .tdstyleData {
+    font-size: 9px;
+  }
 
-        overflow-y: auto;
-        overflow-x: hidden;
-    }
-
-    .tableHistoricoVenda,
-    .tableProdutoDisponivel {
-        width: 100% !important;
-        min-width: 0 !important;
-    }
-}
-
-@media (max-width: 640px) {
-
-    .containerTableHistorico,
-    .containerTableProdutoDisponivel {
-        height: 320px;
-        max-height: 320px;
-        overflow-y: auto;
-        overflow-x: hidden;
-    }
-
-    .tableHistoricoVenda,
-    .tableProdutoDisponivel {
-        width: 100% !important;
-        min-width: 0 !important;
-        table-layout: fixed;
-    }
-
-    .tableHistoricoVenda th,
-    .tableProdutoDisponivel th {
-        font-size: 8px;
-        padding: 10px 3px;
-    }
-
-    .tableHistoricoVenda td,
-    .tableProdutoDisponivel td {
-        font-size: 9px;
-        padding: 9px 3px;
-    }
+  .StatusVenda {
+    padding: 4px 6px;
+    font-size: 9px;
+  }
 }
