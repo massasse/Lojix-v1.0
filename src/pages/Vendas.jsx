@@ -334,6 +334,7 @@ function Vendas() {
               <p>Nenhum produto no carrinho.</p>
             </div>
           ) : (
+            <div className="CarrinhoHeader">
             <div className="CarrinhoBody comProduto styleScrollBar">
               {listaCarrinho.map((produto) => (
                 <div key={produto.id} className="cItem">
@@ -384,7 +385,9 @@ function Vendas() {
                     </p>
                   </div>
                 </div>
+                
               ))}
+            </div>
             </div>
           )}
 
