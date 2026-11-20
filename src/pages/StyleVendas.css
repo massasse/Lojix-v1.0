@@ -170,6 +170,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   grid-auto-rows: max-content;
+  gap:5px;
   min-height: 0;
   max-height: 299px;
   overflow-y: auto;
@@ -179,21 +180,23 @@
 .cItem {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  padding: 5px 2px;
-  background: #f8fafc;
+  gap: 10px;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  padding: 10px;
+  
+  background: #ffffff;
 }
 
 .cHead {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
 }
 
 .cHead .ctitle {
   margin: 0;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   overflow-wrap: anywhere;
 }
@@ -223,7 +226,7 @@
   overflow-wrap: anywhere;
 }
 
-.cBody > span {
+.cBody>span {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   align-items: center;
@@ -234,9 +237,9 @@
   font-weight: 600;
 }
 
-.cBody > span .btnAR {
-  width: 24px;
-  height: 24px;
+.btnAR {
+  width: 40px;
+  height: 30px;
   color: #000000;
   background: transparent;
   border: none;
@@ -245,9 +248,30 @@
   cursor: pointer;
 }
 
+.cQnt{
+  font-size: 13px;
+  font-weight: 600;
+}
+
 .totalPrice {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2563eb;
   margin: 0;
-  font-size: 12px;
+
+}
+
+.cFooter{
+display: flex;
+justify-content: space-between; 
+align-items: center;
+}
+.cQuantidade{
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  font-size: 13px;
 }
 
 /* ============================================================
@@ -255,11 +279,28 @@
    ============================================================ */
 
 .containerTotal {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
   padding: 10px 0;
-  border-top: 1px solid #45444456;
+  border-top: 1px dashed #45444456;
+}
+
+.icon {
+  width: 15px;
+  height: 15px;
+  padding: 8px;
+  font-size: 14px;
+  text-align: center;
+  color: #2563eb;
+  background: #eff6ff;
+  border-radius: 5px;
+
 }
 
 .resumo {
+  font-size: 13px;
+  font-weight: 600;
   display: flex;
   justify-content: space-between;
   gap: 10px;
@@ -268,6 +309,7 @@
 
 .resumo p {
   margin: 0;
+
 }
 
 .acoes {
@@ -297,19 +339,17 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  margin: 10px 0;
-}
+  gap: 12px;}
 
 .desconto label {
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .desconto input {
   box-sizing: border-box;
   width: 110px;
-  padding: 9px 12px;
+  padding: 5px 8px;
   border: 1px solid #dddddd;
   border-radius: 8px;
   outline: none;
@@ -501,7 +541,7 @@
     gap: 5px;
   }
 
-  .cBody > span {
+  .cBody>span {
     width: 100%;
   }
 }
@@ -625,7 +665,7 @@
     font-size: 11px;
   }
 
-  .cBody > span {
+  .cBody>span {
     display: flex;
     gap: 8px;
     font-size: 14px;
@@ -682,5 +722,4 @@
   .modalAcoes button {
     width: 100%;
     padding: 13px;
-  }
-}
+  }}

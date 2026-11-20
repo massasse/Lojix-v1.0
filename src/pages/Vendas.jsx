@@ -1,13 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { FaSearch, FaTrash } from "react-icons/fa";
+import { FaSearch, FaTrashAlt } from "react-icons/fa";
 import { FaCube } from "react-icons/fa6";
-
+import { TbFileInvoice } from "react-icons/tb";
+import { MdOutlineDiscount } from "react-icons/md";
+import { GrMoney } from "react-icons/gr";
 import HeaderPage from "../assets/componets/HeaderPage";
-import {
-  listarProdutos,
-  listarClientes,
-  registarVenda,
-} from "../lib/lojixApi";
+import { listarProdutos, listarClientes, registarVenda } from "../lib/lojixApi";
 
 import "./StyleVendas.css";
 
@@ -75,7 +73,7 @@ function Vendas() {
 
   // 2.2. Produtos que podem ser vendidos (stock superior a zero).
   const produtosFiltrados = produtos.filter(
-    (produto) => Number(produto.stock) > 0
+    (produto) => Number(produto.stock) > 0,
   );
 
   // 2.3. Carregamento inicial de produtos e clientes.
@@ -111,7 +109,7 @@ function Vendas() {
 
   const total = listaCarrinho.reduce(
     (soma, produto) => soma + Number(produto.vendaTotal || 0),
-    0
+    0,
   );
 
   // O desconto não pode ser negativo nem superior ao subtotal.
@@ -126,7 +124,7 @@ function Vendas() {
   // Adiciona uma unidade do produto, respeitando o stock disponível.
   function adicionarCarrinho(id) {
     const produtoAdicionado = produtosFiltrados.find(
-      (produto) => produto.id === id
+      (produto) => produto.id === id,
     );
 
     if (!produtoAdicionado) {
@@ -134,9 +132,7 @@ function Vendas() {
     }
 
     setListaCarrinho((carrinho) => {
-      const produtoExistente = carrinho.find(
-        (produto) => produto.id === id
-      );
+      const produtoExistente = carrinho.find((produto) => produto.id === id);
 
       if (produtoExistente) {
         const quantidadeActual = Number(produtoExistente.quantidade) || 0;
@@ -151,10 +147,9 @@ function Vendas() {
             ? {
                 ...produto,
                 quantidade: quantidadeActual + 1,
-                vendaTotal:
-                  (quantidadeActual + 1) * Number(produto.venda),
+                vendaTotal: (quantidadeActual + 1) * Number(produto.venda),
               }
-            : produto
+            : produto,
         );
       }
 
@@ -186,14 +181,14 @@ function Vendas() {
             vendaTotal: novaQuantidade * Number(produto.venda),
           };
         })
-        .filter((produto) => produto.quantidade > 0)
+        .filter((produto) => produto.quantidade > 0),
     );
   }
 
   // Remove completamente um produto do carrinho.
   function eliminarDoCarrinho(id) {
     setListaCarrinho((carrinho) =>
-      carrinho.filter((produto) => produto.id !== id)
+      carrinho.filter((produto) => produto.id !== id),
     );
   }
 
@@ -230,15 +225,11 @@ function Vendas() {
     }
 
     const cliente = listaClientes.find(
-      (item, index) =>
-        obterIdCliente(item, index) === clienteSelecionado
+      (item, index) => obterIdCliente(item, index) === clienteSelecionado,
     );
 
     // Uma operação a crédito exige um cliente válido.
-    if (
-      (tipoOperacao === "fiado" && !cliente) ||
-      !clienteSelecionado
-    ) {
+    if ((tipoOperacao === "fiado" && !cliente) || !clienteSelecionado) {
       alert("Seleccione um cliente válido para a venda.");
       return;
     }
@@ -267,7 +258,7 @@ function Vendas() {
       alert(
         tipoOperacao === "fiado"
           ? "Fiado registado com sucesso!"
-          : "Venda realizada com sucesso!"
+          : "Venda realizada com sucesso!",
       );
     } catch (erro) {
       alert(`Erro ao concluir a operação: ${erro.message}`);
@@ -290,11 +281,7 @@ function Vendas() {
         <section className="Vendas">
           <div className="inputSearch ContainerInputserch">
             <FaSearch />
-            <input
-              type="text"
-              placeholder="Pesquisar..."
-              className="search"
-            />
+            <input type="text" placeholder="Pesquisar..." className="search" />
           </div>
 
           <div className="ContainerStore">
@@ -351,9 +338,16 @@ function Vendas() {
               {listaCarrinho.map((produto) => (
                 <div key={produto.id} className="cItem">
                   <div className="cHead">
-                    <p className="ctitle">
-                      {produto.produto} ({produto.quantidade})
-                    </p>
+                    <div>
+                      <p className="ctitle">{produto.produto}</p>{" "}
+                      <div className="cBody">
+                        <p className="price">
+                          {produto.categoria}
+                          {" · "}
+                          {formatarNumero(produto.venda)} MT
+                        </p>
+                      </div>
+                    </div>
 
                     <button
                       type="button"
@@ -361,27 +355,12 @@ function Vendas() {
                       className="btnD"
                       aria-label={`Remover ${produto.produto} do carrinho`}
                     >
-                      <FaTrash />
+                      <FaTrashAlt />
                     </button>
                   </div>
 
-                  <div className="cBody">
-                    <p className="price">
-                      {produto.categoria}
-                      {" · "}
-                      {formatarNumero(produto.venda)} MT
-                    </p>
-
-                    <span>
-                      <button
-                        type="button"
-                        onClick={() => adicionarCarrinho(produto.id)}
-                        className="btnAR"
-                        aria-label={`Adicionar uma unidade de ${produto.produto}`}
-                      >
-                        +
-                      </button>
-
+                  <div className="cFooter">
+                    <span className="cQuantidade">
                       <button
                         type="button"
                         onClick={() => removerCarrinho(produto.id)}
@@ -390,11 +369,19 @@ function Vendas() {
                       >
                         -
                       </button>
-
-                      <p className="totalPrice">
-                        {formatarNumero(produto.vendaTotal)}
-                      </p>
+                      <span className="cQnt">{produto.quantidade}</span>
+                      <button
+                        type="button"
+                        onClick={() => adicionarCarrinho(produto.id)}
+                        className="btnAR"
+                        aria-label={`Adicionar uma unidade de ${produto.produto}`}
+                      >
+                        +
+                      </button>
                     </span>
+                    <p className="totalPrice">
+                      {formatarNumero(produto.vendaTotal)}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -404,12 +391,23 @@ function Vendas() {
           {/* 7.3. Subtotal, desconto e total. */}
           <div className="containerTotal">
             <div className="subtotal resumo">
-              <p>Subtotal</p>
+              <p>
+                <span className="icon">
+                  <TbFileInvoice />
+                </span>{" "}
+                Subtotal
+              </p>
               <p>{formatarNumero(total)} MT</p>
             </div>
 
             <div className="desconto resumo">
-              <label htmlFor="descontoVenda">Desconto (MT)</label>
+              <label htmlFor="descontoVenda">
+                {" "}
+                <span className="icon">
+                  <MdOutlineDiscount />
+                </span>{" "}
+                Desconto (MT)
+              </label>
               <input
                 id="descontoVenda"
                 type="number"
@@ -424,7 +422,12 @@ function Vendas() {
             </div>
 
             <div className="total resumo">
-              <p>Total</p>
+              <p>
+                <span className="icon">
+                  <GrMoney />
+                </span>{" "}
+                Total
+              </p>
               <p>{formatarNumero(totalFinal)} MT</p>
             </div>
           </div>
@@ -515,8 +518,8 @@ function Vendas() {
 
               {tipoOperacao === "fiado" && listaClientes.length === 0 && (
                 <p className="avisoFiado">
-                  Não existem clientes registados. Cadastre um cliente antes
-                  de registar um fiado.
+                  Não existem clientes registados. Cadastre um cliente antes de
+                  registar um fiado.
                 </p>
               )}
 
