@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="320" height="320" viewBox="0 0 320 320"
+     role="img" aria-labelledby="title">
+  <title id="title">Logótipo X</title>
+  <g transform="translate(-66 -45.5)">
+    <!-- Diagonal azul: superior esquerdo para inferior direito -->
+    <path fill="#1763FA" d="
+      M 90 79
+      H 151.5
+      C 156.3 79 160.8 80.9 164.2 84.3
+      L 369.4 289.5
+      C 372.8 292.9 374.7 297.4 374.7 302.2
+      V 315
+      C 374.7 323.8 367.5 331 358.7 331
+      H 291.4
+      C 286.6 331 282.1 329.1 278.7 325.7
+      L 80.3 127.3
+      C 76.9 123.9 75 119.4 75 114.6
+      V 95
+      C 75 86.2 81.2 79 90 79
+      Z"/>
+    <!-- Diagonal ciano: inferior esquerdo para superior direito -->
+    <path fill="#14BDF9" d="
+      M 299.5 79
+      H 359.5
+      C 368.3 79 375.5 86.2 375.5 95
+      V 109
+      C 375.5 113.8 373.6 118.3 370.2 121.7
+      L 168 324
+      C 164.6 327.4 160.1 329.3 155.3 329.3
+      H 90
+      C 81.2 329.3 74 322.1 74 313.3
+      V 303
+      C 74 298.2 75.9 293.7 79.3 290.3
+      L 287.1 83.7
+      C 290.5 80.3 294.7 79 299.5 79
+      Z"/>
+    <!-- Sobreposição central -->
+    <path fill="#0D49CE" d="
+      M 226 144
+      L 289.5 207
+      L 223 270
+      L 160 207
+      Z"/>
+  </g>
+</svg>
