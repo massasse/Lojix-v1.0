@@ -1,4 +1,3 @@
-
 /* =========================================
    LOJIX - PÁGINA CAIXA
 ========================================= */
@@ -132,9 +131,9 @@
   color: #475569;
 }
 
-.CardSaldoEsperado > div:last-child,
-.CardValorContado > div:last-child,
-.CardDiferenca > div:last-child {
+.CardSaldoEsperado>div:last-child,
+.CardValorContado>div:last-child,
+.CardDiferenca>div:last-child {
   min-width: 0;
   display: flex;
   flex-direction: column;
@@ -271,7 +270,7 @@
   color: #2563eb;
 }
 
-.TituloSecaoCaixa > span {
+.TituloSecaoCaixa>span {
   font-size: 11px;
   color: #64748b;
   font-weight: 600;
@@ -296,6 +295,7 @@
 
 .TabelaCaixaScroll table {
   width: 100%;
+  table-layout: fixed;
   border-collapse: collapse;
 }
 
@@ -325,6 +325,10 @@
 
 .TabelaCaixaScroll td strong {
   color: #0f172a;
+}
+
+.DescricaoMovimento {
+  white-space: wrap !important;  
 }
 
 /* =========================================
@@ -775,67 +779,67 @@
 /* Bloquear o crescimento da aplicação */
 body:has(.contentCaixa),
 #root:has(.contentCaixa) {
-    width: 100%;
-    height: 100vh;
-    overflow: hidden;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
 }
 
 /* Manter a estrutura principal fixa */
 .containerPrincipal:has(.contentCaixa) {
-    width: 100%;
-    height: 100vh;
-    min-height: 0;
-    grid-template-rows: minmax(0, 1fr);
+  width: 100%;
+  height: 100vh;
+  min-height: 0;
+  grid-template-rows: minmax(0, 1fr);
 }
 
 /* Navbar não pode crescer */
-.containerPrincipal:has(.contentCaixa) > .navbar {
-    width: 100%;
-    height: 100vh;
-    min-width: 0;
-    min-height: 0;
-    overflow: hidden;
+.containerPrincipal:has(.contentCaixa)>.navbar {
+  width: 100%;
+  height: 100vh;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
 }
 
 /* Área principal: scroll vertical geral */
 .ContainerContent:has(.contentCaixa) {
-    width: 100%;
-    height: 100vh;
-    min-width: 0;
-    min-height: 0;
-    overflow-x: hidden;
-    overflow-y: auto;
+  width: 100%;
+  height: 100vh;
+  min-width: 0;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 /* Único scroll horizontal da página Caixa */
 .contentCaixa {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
 
-    height: auto;
-    min-height: 100%;
+  height: auto;
+  min-height: 100%;
 
-    overflow-x: auto;
-    overflow-y: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
 
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 /* Conteúdo não deve aumentar a largura do Navbar */
 .ContentCaixaPage {
-    width: 100%;
-    min-width: 0;
-    box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 /* Tabelas não criam scroll independente */
 .TabelaCaixaScroll {
-    width: 100%;
-    overflow: visible;
+  width: 100%;
+  overflow: visible;
 }
 
 /* =========================================
@@ -844,33 +848,33 @@ body:has(.contentCaixa),
 
 @media (max-width: 640px) {
 
-    body:has(.contentCaixa),
-    #root:has(.contentCaixa) {
-        height: 100dvh;
-    }
+  body:has(.contentCaixa),
+  #root:has(.contentCaixa) {
+    height: 100dvh;
+  }
 
-    .containerPrincipal:has(.contentCaixa) {
-        display: block;
-        height: 100dvh;
-        min-height: 0;
-    }
+  .containerPrincipal:has(.contentCaixa) {
+    display: block;
+    height: 100dvh;
+    min-height: 0;
+  }
 
-    .containerPrincipal:has(.contentCaixa) > .navbar {
-        height: 65px;
-        min-height: 65px;
-    }
+  .containerPrincipal:has(.contentCaixa)>.navbar {
+    height: 65px;
+    min-height: 65px;
+  }
 
-    .ContainerContent:has(.contentCaixa) {
-        height: calc(100dvh - 65px);
-        min-height: 0;
-        overflow-x: hidden;
-        overflow-y: auto;
-    }
+  .ContainerContent:has(.contentCaixa) {
+    height: calc(100dvh - 65px);
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
 
-    .contentCaixa {
-        height: auto;
-        min-height: 100%;
-        overflow-x: auto;
-        overflow-y: hidden;
-    }
+  .contentCaixa {
+    height: auto;
+    min-height: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
 }

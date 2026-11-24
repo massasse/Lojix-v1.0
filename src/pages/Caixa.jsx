@@ -1059,7 +1059,9 @@ function Caixa() {
                           </span>
                         </td>
 
-                        <td>{movimento.descricao || "—"}</td>
+                        <td className="DescricaoMovimento">
+                          {movimento.descricao || "—"}
+                        </td>
 
                         <td>{movimento.cliente || "—"}</td>
 
