@@ -1,8 +1,15 @@
+
+
 /* =========================================
+
    LOJIX - PÁGINA CAIXA
+
 ========================================= */
 
+
+
 .contentCaixa {
+
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -11,14 +18,18 @@
   max-width: 100%;
   gap: 12px;
 
+
   overflow-x: auto;
   overflow-y: auto;
-
   box-sizing: border-box;
   scrollbar-gutter: stable;
+
 }
 
+
+
 .ContentCaixaPage {
+
   display: flex;
   flex-direction: column;
   min-height: 0;
@@ -27,854 +38,1776 @@
   min-width: 0;
   width: 100%;
   box-sizing: border-box;
+
 }
 
+
+
 /* =========================================
+
    RESUMO FINANCEIRO
+
 ========================================= */
+
+
 
 .ResumoCaixa {
+
   display: grid;
+
   grid-template-columns: repeat(4, minmax(0, 1fr));
+
   gap: 10px;
+
 }
+
+
 
 .CardCaixa {
+
   background: #f8fafc;
+
   border-radius: 10px;
+
   padding: 17px 15px;
+
   display: flex;
+
   flex-direction: column;
+
   gap: 10px;
+
   min-width: 0;
+
   transition: transform 0.2s ease;
+
 }
+
+
 
 .CardCaixa:hover {
+
   transform: translateY(-2px);
+
 }
+
+
 
 .CardCaixa p {
+
   font-size: 12px;
+
   font-weight: 600;
+
   color: #64748b;
+
 }
+
+
 
 .CardCaixa strong {
+
   font-size: 17px;
+
   color: #0f172a;
+
   font-weight: 700;
+
   overflow-wrap: anywhere;
+
 }
+
+
 
 .ValorSaida {
+
   color: #dc2626 !important;
+
 }
+
+
 
 .ValorEntrada {
+
   color: #16a34a !important;
+
 }
 
+
+
 /* =========================================
+
    SALDO, CONTAGEM E DIFERENÇA
+
 ========================================= */
+
+
 
 .ResumoSaldoCaixa {
+
   display: grid;
+
   grid-template-columns: repeat(3, minmax(0, 1fr));
+
   gap: 10px;
+
 }
+
+
 
 .CardSaldoEsperado,
+
 .CardValorContado,
+
 .CardDiferenca {
+
   display: flex;
+
   align-items: center;
+
   gap: 15px;
+
   padding: 19px;
+
   border-radius: 10px;
+
   background: #f8fafc;
+
   min-width: 0;
+
 }
+
+
 
 .CardSaldoEsperado {
+
   border-left: 4px solid #2563eb;
+
 }
+
+
 
 .CardValorContado {
+
   border-left: 4px solid #64748b;
+
 }
+
+
 
 .CardDiferenca {
+
   border-left: 4px solid #94a3b8;
+
 }
+
+
 
 .IconeCaixa {
+
   display: flex;
+
   align-items: center;
+
   justify-content: center;
+
   min-width: 42px;
+
   height: 42px;
+
   border-radius: 9px;
+
   background: #dbeafe;
+
   color: #2563eb;
+
   font-size: 19px;
+
 }
+
+
 
 .CardValorContado .IconeCaixa {
+
   background: #e2e8f0;
+
   color: #475569;
+
 }
+
+
 
 .CardDiferenca .IconeCaixa {
+
   background: #e2e8f0;
+
   color: #475569;
+
 }
 
-.CardSaldoEsperado>div:last-child,
-.CardValorContado>div:last-child,
-.CardDiferenca>div:last-child {
+
+
+.CardSaldoEsperado > div:last-child,
+
+.CardValorContado > div:last-child,
+
+.CardDiferenca > div:last-child {
+
   min-width: 0;
+
   display: flex;
+
   flex-direction: column;
+
   gap: 6px;
+
 }
+
+
 
 .ResumoSaldoCaixa p {
+
   font-size: 12px;
+
   color: #64748b;
+
   font-weight: 600;
+
 }
+
+
 
 .ResumoSaldoCaixa strong {
+
   font-size: 19px;
+
   color: #0f172a;
+
   overflow-wrap: anywhere;
+
 }
+
+
 
 .ResumoSaldoCaixa small {
+
   color: #64748b;
+
   font-size: 10px;
+
 }
+
+
 
 .CardDiferenca.DiferencaPositiva {
+
   border-left-color: #16a34a;
+
 }
+
+
 
 .CardDiferenca.DiferencaPositiva strong {
+
   color: #16a34a;
+
 }
+
+
 
 .CardDiferenca.DiferencaNegativa {
+
   border-left-color: #dc2626;
+
 }
+
+
 
 .CardDiferenca.DiferencaNegativa strong {
+
   color: #dc2626;
+
 }
+
+
 
 .CardDiferenca.DiferencaZero {
+
   border-left-color: #16a34a;
+
 }
+
+
 
 .CardDiferenca.DiferencaZero strong {
+
   color: #16a34a;
+
 }
 
+
+
 /* =========================================
+
    OPERAÇÕES DO CAIXA
+
 ========================================= */
+
+
 
 .OperacoesCaixa {
+
   display: grid;
+
   grid-template-columns: repeat(6, minmax(0, 1fr));
+
   gap: 10px;
+
 }
+
+
 
 .BtnOperacao {
+
   border: none;
+
   border-radius: 8px;
+
   padding: 13px 10px;
+
   display: flex;
+
   justify-content: center;
+
   align-items: center;
+
   gap: 9px;
+
   font-size: 12px;
+
   font-weight: 600;
+
   cursor: pointer;
+
   transition: 0.2s;
+
   min-width: 0;
+
 }
+
+
 
 .BtnOperacao:hover {
+
   transform: translateY(-2px);
+
   filter: brightness(0.96);
+
 }
+
+
 
 .BtnOperacao svg {
+
   font-size: 16px;
+
   flex-shrink: 0;
+
 }
+
+
 
 .BtnEntrada {
+
   background: #dcfce7;
+
   color: #15803d;
+
 }
+
+
 
 .BtnDespesa {
+
   background: #fee2e2;
+
   color: #dc2626;
+
 }
+
+
 
 .BtnLevantamento {
+
   background: #e2e8f0;
+
   color: #334155;
+
 }
+
+
 
 .BtnEmprestimo {
+
   background: #dbeafe;
+
   color: #1d4ed8;
+
 }
+
+
 
 .BtnSaldoInicial {
+
   background: #e0e7ff;
+
   color: #4338ca;
+
 }
+
+
 
 .BtnContagem {
+
   background: #f1f5f9;
+
   color: #334155;
+
 }
 
+
+
 /* =========================================
+
    SECÇÕES E TÍTULOS
+
 ========================================= */
+
+
 
 .TituloSecaoCaixa {
+
   display: flex;
+
   justify-content: space-between;
+
   align-items: center;
+
   gap: 10px;
+
   margin-bottom: 14px;
+
 }
+
+
 
 .TituloSecaoCaixa h2 {
+
   font-size: 16px;
+
   color: #0f172a;
+
   display: flex;
+
   align-items: center;
+
   gap: 9px;
+
 }
+
+
 
 .TituloSecaoCaixa h2 svg {
+
   color: #2563eb;
+
 }
 
-.TituloSecaoCaixa>span {
+
+
+.TituloSecaoCaixa > span {
+
   font-size: 11px;
+
   color: #64748b;
+
   font-weight: 600;
+
 }
+
+
 
 /* =========================================
+
    TABELAS
+
 ========================================= */
+
+
 
 .TabelaEmprestimos,
+
 .HistoricoCaixa {
+
   background: #f8fafc;
+
   border-radius: 10px;
+
   padding: 17px 18px;
+
   min-width: 0;
+
 }
+
+
 
 .TabelaCaixaScroll {
+
   width: 100%;
+
   overflow: visible;
+
 }
+
+
 
 .TabelaCaixaScroll table {
+
   width: 100%;
-  table-layout: fixed;
+
   border-collapse: collapse;
+
 }
+
+
 
 .TabelaCaixaScroll thead {
+
   position: sticky;
+
   top: 0;
+
   z-index: 2;
+
   background: #f8fafc;
+
 }
+
+
 
 .TabelaCaixaScroll th {
+
   text-align: left;
+
   font-size: 11px;
+
   color: #475569;
+
   padding: 15px 10px;
+
   border-bottom: 1px solid #cbd5e1;
+
   white-space: nowrap;
+
 }
+
+
 
 .TabelaCaixaScroll td {
+
   padding: 14px 10px;
+
   font-size: 12px;
+
   color: #334155;
+
   border-bottom: 1px solid #e2e8f0;
+
   white-space: nowrap;
+
 }
+
+
 
 .TabelaCaixaScroll td strong {
+
   color: #0f172a;
+
 }
 
-.DescricaoMovimento {
-  white-space: wrap !important;  
-}
+
 
 /* =========================================
+
    EMPRÉSTIMOS
+
 ========================================= */
+
+
 
 .ValorPendente {
+
   color: #dc2626 !important;
+
 }
+
+
 
 .BtnDevolucao {
+
   background: #2563eb;
+
   border: none;
+
   border-radius: 6px;
+
   padding: 8px 10px;
+
   color: white;
+
   font-size: 11px;
+
   font-weight: 600;
+
   cursor: pointer;
+
 }
+
+
 
 .BtnDevolucao:hover {
+
   background: #1d4ed8;
+
 }
+
+
 
 .EmprestimoLiquidado {
+
   color: #16a34a;
+
   font-size: 11px;
+
   font-weight: 700;
+
 }
 
+
+
 /* =========================================
+
    FILTROS DO HISTÓRICO
+
 ========================================= */
+
+
 
 .FiltrosCaixa {
+
   display: flex;
+
   gap: 10px;
+
   margin-bottom: 15px;
+
 }
+
+
 
 .PesquisaCaixa {
+
   display: flex;
+
   align-items: center;
+
   gap: 10px;
+
   background: white;
+
   border: 1px solid #e2e8f0;
+
   border-radius: 7px;
+
   padding: 0 12px;
+
   flex: 1;
+
   min-width: 0;
+
 }
+
+
 
 .PesquisaCaixa svg {
+
   color: #64748b;
+
   font-size: 14px;
+
 }
+
+
 
 .PesquisaCaixa input {
+
   border: none;
+
   outline: none;
+
   width: 100%;
+
   height: 40px;
+
   font-size: 12px;
+
   background: transparent;
+
   color: #0f172a;
+
 }
+
+
 
 .FiltrosCaixa select {
+
   width: 210px;
+
   max-width: 45%;
+
   border: 1px solid #e2e8f0;
+
   border-radius: 7px;
+
   padding: 0 10px;
+
   background: white;
+
   color: #334155;
+
   outline: none;
+
   font-size: 12px;
+
 }
 
+
+
 /* =========================================
+
    ETIQUETAS DOS MOVIMENTOS
+
 ========================================= */
+
+
 
 .EtiquetaMovimento {
+
   display: inline-block;
+
   padding: 5px 8px;
+
   border-radius: 5px;
+
   font-size: 10px;
+
   font-weight: 700;
+
 }
+
+
 
 .EtiquetaMovimento.venda,
+
 .EtiquetaMovimento.recebimento_fiado,
+
 .EtiquetaMovimento.entrada,
+
 .EtiquetaMovimento.devolucao_emprestimo {
+
   background: #dcfce7;
+
   color: #15803d;
+
 }
+
+
 
 .EtiquetaMovimento.despesa,
+
 .EtiquetaMovimento.levantamento,
+
 .EtiquetaMovimento.emprestimo {
+
   background: #fee2e2;
+
   color: #dc2626;
+
 }
+
+
 
 .EtiquetaMovimento.saldo_inicial {
+
   background: #dbeafe;
+
   color: #1d4ed8;
+
 }
+
+
 
 .EtiquetaMovimento.contagem_caixa {
+
   background: #e2e8f0;
+
   color: #475569;
+
 }
+
+
 
 /* =========================================
+
    MODAIS
+
 ========================================= */
 
+
+
 .OverlayCaixa {
+
   position: fixed;
+
   inset: 0;
+
   z-index: 1000;
+
   display: flex;
+
   justify-content: center;
+
   align-items: center;
+
   padding: 20px;
+
   background: rgba(15, 23, 42, 0.55);
+
 }
+
+
 
 .ModalCaixa {
+
   width: 100%;
+
   max-width: 520px;
+
   max-height: 90vh;
+
   overflow-y: auto;
+
   padding: 27px;
+
   background: white;
+
   border-radius: 12px;
+
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+
   animation: aparecerModalCaixa 0.2s ease;
+
 }
+
+
 
 .ModalCaixaHeader {
+
   display: flex;
+
   justify-content: space-between;
+
   align-items: flex-start;
+
   gap: 15px;
+
   margin-bottom: 25px;
+
 }
+
+
 
 .ModalCaixaHeader h2 {
+
   font-size: 21px;
+
   color: #0f172a;
+
   margin-bottom: 7px;
+
 }
+
+
 
 .ModalCaixaHeader p {
+
   color: #64748b;
+
   font-size: 13px;
+
 }
+
+
 
 .FecharModalCaixa {
+
   background: transparent;
+
   border: none;
+
   color: #64748b;
+
   font-size: 22px;
+
   cursor: pointer;
+
 }
+
+
 
 .FormCaixa {
+
   width: 100%;
+
   display: flex;
+
   flex-direction: column;
+
   align-items: stretch;
+
   gap: 17px;
+
 }
+
+
 
 .CampoCaixa {
+
   display: flex;
+
   flex-direction: column;
+
   gap: 8px;
+
 }
+
+
 
 .CampoCaixa label {
+
   font-size: 13px;
+
   font-weight: 600;
+
   color: #334155;
+
 }
+
+
 
 .CampoCaixa input,
+
 .CampoCaixa textarea {
+
   width: 100%;
+
   box-sizing: border-box;
+
   padding: 12px;
+
   border: 1px solid #cbd5e1;
+
   border-radius: 7px;
+
   background: white;
+
   color: #0f172a;
+
   font-family: inherit;
+
   font-size: 14px;
+
   outline: none;
+
   resize: vertical;
+
 }
+
+
 
 .CampoCaixa input:focus,
+
 .CampoCaixa textarea:focus {
+
   border-color: #2563eb;
+
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+
 }
+
+
 
 .BotoesModalCaixa {
+
   display: flex;
+
   justify-content: flex-end;
+
   gap: 10px;
+
   padding-top: 18px;
+
   border-top: 1px solid #e2e8f0;
+
 }
+
+
 
 .BotoesModalCaixa button {
+
   border-radius: 7px;
+
   padding: 11px 16px;
+
   font-size: 12px;
+
   font-weight: 600;
+
   cursor: pointer;
+
 }
+
+
 
 .CancelarCaixa {
+
   background: white;
+
   border: 1px solid #cbd5e1;
+
   color: #334155;
+
 }
+
+
 
 .ConfirmarCaixa {
+
   background: #2563eb;
+
   border: 1px solid #2563eb;
+
   color: white;
+
 }
 
+
+
 .ConfirmarCaixa:hover {
+
   background: #1d4ed8;
+
 }
+
+
 
 /* AVISOS */
 
+
+
 .AvisoEmprestimo,
+
 .AvisoLevantamento {
+
   padding: 12px;
+
   border-radius: 7px;
+
   font-size: 12px;
+
   line-height: 1.5;
+
 }
+
+
 
 .AvisoEmprestimo {
+
   background: #eff6ff;
+
   color: #1d4ed8;
+
 }
 
+
+
 .AvisoLevantamento {
+
   background: #f1f5f9;
+
   color: #475569;
+
 }
+
+
 
 /* RESUMO DA DEVOLUÇÃO */
 
+
+
 .ResumoDevolucao {
+
   display: flex;
+
   flex-direction: column;
+
   gap: 12px;
+
   padding: 15px;
+
   border-radius: 8px;
+
   background: #f1f5f9;
+
 }
+
+
 
 .ResumoDevolucao div {
+
   display: flex;
+
   flex-direction: column;
+
   gap: 5px;
+
 }
+
+
 
 .ResumoDevolucao span {
+
   color: #64748b;
+
   font-size: 12px;
+
 }
+
+
 
 .ResumoDevolucao strong {
+
   font-size: 16px;
+
   color: #0f172a;
+
 }
 
+
+
 /* =========================================
+
    ERROS
+
 ========================================= */
+
+
 
 .ErroCaixa {
+
   background: white;
+
   padding: 25px;
+
   border-radius: 10px;
+
   border-left: 4px solid #dc2626;
+
 }
+
+
 
 .ErroCaixa h2 {
+
   color: #dc2626;
+
   font-size: 20px;
+
   margin-bottom: 12px;
+
 }
+
+
 
 .ErroCaixa p {
+
   font-size: 13px;
+
   color: #475569;
+
   margin-bottom: 10px;
+
 }
 
+
+
 /* =========================================
+
    RESPONSIVIDADE
+
 ========================================= */
+
+
 
 @media (max-width: 1100px) {
 
+
+
   .ResumoCaixa {
+
     grid-template-columns: repeat(3, minmax(0, 1fr));
+
   }
+
+
 
   .OperacoesCaixa {
+
     grid-template-columns: repeat(3, minmax(0, 1fr));
+
   }
 
+
+
 }
+
+
 
 @media (max-width: 800px) {
 
+
+
   .ResumoSaldoCaixa {
+
     grid-template-columns: 1fr;
+
   }
 
+
+
   .ResumoCaixa {
+
     grid-template-columns: repeat(2, minmax(0, 1fr));
+
   }
+
+
 
   .TabelaCaixaScroll table {
+
     min-width: 750px;
+
   }
+
+
 
 }
 
+
+
 @media (max-width: 640px) {
 
+
+
   .contentCaixa {
+
     height: auto;
+
     min-height: 100%;
+
   }
+
+
 
   .ContentCaixaPage {
+
     overflow: visible;
+
   }
+
+
 
   .ResumoCaixa {
+
     grid-template-columns: repeat(2, minmax(0, 1fr));
+
     gap: 9px;
+
   }
+
+
 
   .CardCaixa {
+
     padding: 13px 11px;
+
   }
+
+
 
   .CardCaixa p {
+
     font-size: 10px;
+
   }
+
+
 
   .CardCaixa strong {
+
     font-size: 14px;
+
   }
+
+
 
   .ResumoSaldoCaixa {
+
     grid-template-columns: 1fr;
+
   }
+
+
 
   .CardSaldoEsperado,
+
   .CardValorContado,
+
   .CardDiferenca {
+
     padding: 15px;
+
   }
+
+
 
   .ResumoSaldoCaixa strong {
+
     font-size: 17px;
+
   }
+
+
 
   .OperacoesCaixa {
+
     grid-template-columns: repeat(2, minmax(0, 1fr));
+
     gap: 8px;
+
   }
+
+
 
   .BtnOperacao {
+
     padding: 13px 8px;
+
     font-size: 11px;
+
     flex-direction: column;
+
     gap: 7px;
+
   }
+
+
 
   .TabelaEmprestimos,
+
   .HistoricoCaixa {
+
     padding: 13px 10px;
+
   }
+
+
 
   .TituloSecaoCaixa h2 {
+
     font-size: 14px;
+
   }
+
+
 
   .FiltrosCaixa {
+
     flex-direction: column;
+
   }
+
+
 
   .FiltrosCaixa select {
+
     width: 100%;
+
     max-width: 100%;
+
     height: 40px;
+
   }
+
+
 
   .PesquisaCaixa {
+
     width: 100%;
+
     flex: none;
+
   }
+
+
 
   .ModalCaixa {
+
     padding: 19px;
+
   }
+
+
 
   .OverlayCaixa {
+
     padding: 12px;
+
   }
+
+
 
   .BotoesModalCaixa {
+
     flex-direction: column-reverse;
+
   }
+
+
 
   .BotoesModalCaixa button {
+
     width: 100%;
+
   }
 
+
+
 }
 
 
+
+
+
 /* =========================================
+
    CORRECÇÃO DEFINITIVA DO SCROLL DO CAIXA
+
 ========================================= */
+
+
 
 /* Bloquear o crescimento da aplicação */
+
 body:has(.contentCaixa),
+
 #root:has(.contentCaixa) {
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
+
+    width: 100%;
+
+    height: 100vh;
+
+    overflow: hidden;
+
 }
+
+
 
 /* Manter a estrutura principal fixa */
+
 .containerPrincipal:has(.contentCaixa) {
-  width: 100%;
-  height: 100vh;
-  min-height: 0;
-  grid-template-rows: minmax(0, 1fr);
+
+    width: 100%;
+
+    height: 100vh;
+
+    min-height: 0;
+
+    grid-template-rows: minmax(0, 1fr);
+
 }
+
+
 
 /* Navbar não pode crescer */
-.containerPrincipal:has(.contentCaixa)>.navbar {
-  width: 100%;
-  height: 100vh;
-  min-width: 0;
-  min-height: 0;
-  overflow: hidden;
+
+.containerPrincipal:has(.contentCaixa) > .navbar {
+
+    width: 100%;
+
+    height: 100vh;
+
+    min-width: 0;
+
+    min-height: 0;
+
+    overflow: hidden;
+
 }
+
+
 
 /* Área principal: scroll vertical geral */
+
 .ContainerContent:has(.contentCaixa) {
-  width: 100%;
-  height: 100vh;
-  min-width: 0;
-  min-height: 0;
-  overflow-x: hidden;
-  overflow-y: auto;
+
+    width: 100%;
+
+    height: 100vh;
+
+    min-width: 0;
+
+    min-height: 0;
+
+    overflow-x: hidden;
+
+    overflow-y: auto;
+
 }
+
+
 
 /* Único scroll horizontal da página Caixa */
+
 .contentCaixa {
-  display: flex;
-  flex-direction: column;
 
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
+    display: flex;
 
-  height: auto;
-  min-height: 100%;
+    flex-direction: column;
 
-  overflow-x: auto;
-  overflow-y: hidden;
 
-  box-sizing: border-box;
+
+    width: 100%;
+
+    max-width: 100%;
+
+    min-width: 0;
+
+
+
+    height: auto;
+
+    min-height: 100%;
+
+
+
+    overflow-x: auto;
+
+    overflow-y: hidden;
+
+
+
+    box-sizing: border-box;
+
 }
+
+
 
 /* Conteúdo não deve aumentar a largura do Navbar */
+
 .ContentCaixaPage {
-  width: 100%;
-  min-width: 0;
-  box-sizing: border-box;
+
+    width: 100%;
+
+    min-width: 0;
+
+    box-sizing: border-box;
+
 }
+
+
 
 /* Tabelas não criam scroll independente */
+
 .TabelaCaixaScroll {
-  width: 100%;
-  overflow: visible;
+
+    width: 100%;
+
+    overflow: visible;
+
 }
 
+
+
 /* =========================================
+
    MOBILE
+
 ========================================= */
+
+
 
 @media (max-width: 640px) {
 
-  body:has(.contentCaixa),
-  #root:has(.contentCaixa) {
-    height: 100dvh;
-  }
 
-  .containerPrincipal:has(.contentCaixa) {
+
+    body:has(.contentCaixa),
+
+    #root:has(.contentCaixa) {
+
+        height: 100dvh;
+
+    }
+
+
+
+    .containerPrincipal:has(.contentCaixa) {
+
+        display: block;
+
+        height: 100dvh;
+
+        min-height: 0;
+
+    }
+
+
+
+    .containerPrincipal:has(.contentCaixa) > .navbar {
+
+        height: 65px;
+
+        min-height: 65px;
+
+    }
+
+
+
+    .ContainerContent:has(.contentCaixa) {
+
+        height: calc(100dvh - 65px);
+
+        min-height: 0;
+
+        overflow-x: hidden;
+
+        overflow-y: auto;
+
+    }
+
+
+
+    .contentCaixa {
+
+        height: auto;
+
+        min-height: 100%;
+
+        overflow-x: auto;
+
+        overflow-y: hidden;
+
+    }
+
+}
+
+
+/* =========================================
+   SCROLL HORIZONTAL DO HISTÓRICO DE CAIXA
+========================================= */
+
+.TabelaHistoricoCaixa.TabelaCaixaScroll {
     display: block;
-    height: 100dvh;
-    min-height: 0;
-  }
-
-  .containerPrincipal:has(.contentCaixa)>.navbar {
-    height: 65px;
-    min-height: 65px;
-  }
-
-  .ContainerContent:has(.contentCaixa) {
-    height: calc(100dvh - 65px);
-    min-height: 0;
-    overflow-x: hidden;
-    overflow-y: auto;
-  }
-
-  .contentCaixa {
-    height: auto;
-    min-height: 100%;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
     overflow-x: auto;
     overflow-y: hidden;
-  }
+    -webkit-overflow-scrolling: touch;
+    scrollbar-gutter: stable;
+}
+
+.TabelaHistoricoCaixa.TabelaCaixaScroll table {
+    width: 100%;
+    min-width: 850px;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+/* Larguras das colunas do histórico */
+.TabelaHistoricoCaixa th:nth-child(1),
+.TabelaHistoricoCaixa td:nth-child(1) {
+    width: 175px;
+}
+
+.TabelaHistoricoCaixa th:nth-child(2),
+.TabelaHistoricoCaixa td:nth-child(2) {
+    width: 280px;
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+    word-break: normal;
+    line-height: 1.45;
+}
+
+.TabelaHistoricoCaixa th:nth-child(3),
+.TabelaHistoricoCaixa td:nth-child(3) {
+    width: 190px;
+}
+
+.TabelaHistoricoCaixa th:nth-child(4),
+.TabelaHistoricoCaixa td:nth-child(4) {
+    width: 160px;
+}
+
+.TabelaHistoricoCaixa th:nth-child(5),
+.TabelaHistoricoCaixa td:nth-child(5) {
+    width: 140px;
+}
+
+/* =========================================
+   SCROLL HORIZONTAL DOS EMPRÉSTIMOS
+========================================= */
+
+.TabelaEmprestimos {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.TabelaEmprestimos .TabelaCaixaScroll {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-gutter: stable;
+}
+
+.TabelaEmprestimos .TabelaCaixaScroll table {
+    width: 100%;
+    min-width: 850px;
+    border-collapse: collapse;
 }
